@@ -1,10 +1,11 @@
 <h1>What do you want to create?</h1>
 <form>
  - A new Parrot High Level Language (HLL) <br>
-    - Name: <br>
+    - Name:<input type="text" size="30"> <br>
     - Builders: Perl, PIR, NQP, Winxed <br>
-    - Test suite: Rosella
+    - Test suite: Rosella 
     - Options: Custom PMCs, Custom ops, docs<br>
+    - <a href="https://github.com/benabik/cish">Documentation</a> for customizing your new HLL
  - A new Parrot library<br>
     - Name: <br>
     - Test suite: Rosella<br>
