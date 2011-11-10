@@ -70,8 +70,6 @@ use File::Path;
 use File::Spec;
 use Getopt::Long;
 
-use Parrot::Config qw/ %PConfig /;
-
 my ($with_doc, $with_ops, $with_pmc);
 GetOptions(
     'with-doc' => \$with_doc,
@@ -117,7 +115,8 @@ while (<DATA>) {
     s{\@no_ops\@} {$no_ops}ig;
     s{\@no_pmc\@} {$no_pmc}ig;
     s{\@rev\@}    {$rev}ig;
-    if (/^__(.*)__$/) { start_new_file("$path$PConfig{slash}$1"); }
+    # TODO: slashitis
+    if (/^__(.*)__$/) { start_new_file("$path/$1"); }
     elsif ($fh) { print $fh $_; }
 }
 ##  close the last file

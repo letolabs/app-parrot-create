@@ -13,8 +13,9 @@ my $builder = Module::Build->new(
         'Test::Most'      => 0,
     },
     requires => {
-        'YAML'       => 0,
-        'Dancer'     => 1.3040,
+        'YAML'         => 0,
+        'Dancer'       => 1.3040,
+        'Archive::Zip' => 0,
     },
     add_to_cleanup      => [ 'App-Parrot-Create-*' ],
     meta_merge     => {
