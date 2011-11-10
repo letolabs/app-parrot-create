@@ -1,4 +1,4 @@
-use Test::More tests => 2;
+use Test::More tests => 4;
 use strict;
 use warnings;
 
@@ -8,3 +8,6 @@ use Dancer::Test;
 
 route_exists [GET => '/'], 'a route handler is defined for /';
 response_status_is ['GET' => '/'], 200, 'response status is 200 for /';
+
+route_exists [POST => '/submit'], 'a route handler is defined for /submit';
+response_status_is ['POST' => '/submit'], 200, 'response status is 200 for /submit';

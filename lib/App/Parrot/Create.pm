@@ -7,4 +7,8 @@ get '/' => sub {
     template 'index';
 };
 
+post '/submit' => sub {
+    template 'submit';
+};
+
 true;
