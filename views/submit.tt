@@ -1,1 +1,4 @@
 Submit template
+<% name %>
+<% builder %>
+<% harness %>

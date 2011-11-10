@@ -1,18 +1,18 @@
 <h1>What do you want to create?</h1>
-<form action="/submit" method="post">
+<form action="/submit" method="get">
 <div id="newlang">
     <input value="checked" type="checkbox" name="advanced" id="advanced_control" onclick="$('#newlang-options').toggle('slow', 'swing')">
   <font size="large">A new Parrot High Level Language (HLL)</font> <br/>
  <div id="newlang-options" style="">
-    - Name:<input type="text" size="30"> <br/>
+    - Name:<input type="text" size="30" name="language_name"> <br/>
     - Builders:
-        <select>
+        <select name="builder">
         <option selected="true">Winxed</option>
         <option>NQP (Not Quite Perl 6)</option>
         <option>PIR (Parrot Intermediate Representation)</option>
         <option>Perl 5</option>
         </select><br/>
-    - Test suite: <select>
+    - Test Harness: <select name="test_harness">
             <option>Rosella (Winxed)</option>
             <option>Rosella (NQP)</option>
             <option>Perl 5</option>
