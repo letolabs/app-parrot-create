@@ -1,6 +1,8 @@
 <h1>What do you want to create?</h1>
 <form action="/submit" method="post">
+<div id="newlang">
  - A new Parrot High Level Language (HLL) <br/>
+ <div id="newlang-options">
     - Name:<input type="text" size="30"> <br/>
     - Builders:
         <select>
@@ -16,7 +18,11 @@
             </select><br/>
     - Options: Custom PMCs, Custom ops, docs<br>
     - <a href="https://github.com/benabik/cish">Documentation</a> for customizing your new HLL
+    </div>
+</div>
+<div id="newlib">
  - A new Parrot library<br>
+ <div id="newlib-options">
     - Name: <br>
     - Builders:
         <select>
@@ -30,4 +36,6 @@
             <option>Rosella (NQP)</option>
             <option>Perl 5</option>
             </select><br/>
+    </div>
+</div>
 </form>
