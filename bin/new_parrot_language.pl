@@ -4,13 +4,13 @@
 
 =head1 NAME
 
-tools/dev/new_parrot_language.pl -- create new language skeletons
+bin/new_parrot_language.pl -- create new language skeletons
 
 =head1 SYNOPSIS
 
- % perl tools/dev/new_parrot_language.pl [options] Xyz [path]
+ % perl bin/new_parrot_language.pl [options] LanguageName [path]
 
-option:
+Possible options include:
 
  --with-doc
  --with-ops
