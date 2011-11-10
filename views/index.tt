@@ -1,8 +1,9 @@
 <h1>What do you want to create?</h1>
 <form action="/submit" method="post">
 <div id="newlang">
- - A new Parrot High Level Language (HLL) <br/>
- <div id="newlang-options">
+    <input value="unchecked" type="checkbox" name="advanced" id="advanced_control" onclick="$('#newlang-options').toggle('slow', 'swing')">
+  A new Parrot High Level Language (HLL) <br/>
+ <div id="newlang-options" style="display:none">
     - Name:<input type="text" size="30"> <br/>
     - Builders:
         <select>
@@ -16,14 +17,19 @@
             <option>Rosella (NQP)</option>
             <option>Perl 5</option>
             </select><br/>
-    - Options: Custom PMCs, Custom ops, docs<br>
+    - Options:<br/>
+        <input value="unchecked" type="checkbox" name="custom_pmc">Custom PMCs<br/>
+        <input value="unchecked" type="checkbox" name="custom_ops">Custom ops<br/>
+        <input value="unchecked" type="checkbox" name="docs">Design Doc templates (POD)<br/>
+        <br/>
     - <a href="https://github.com/benabik/cish">Documentation</a> for customizing your new HLL
     </div>
 </div>
 <div id="newlib">
- - A new Parrot library<br>
- <div id="newlib-options">
-    - Name: <br>
+    <input value="unchecked" type="checkbox" name="advanced" id="advanced_control" onclick="$('#newlib-options').toggle('slow', 'swing')">
+  A new Parrot library<br>
+ <div id="newlib-options" style="display:none">
+    - Name:<input type="text" size="30"> <br/>
     - Builders:
         <select>
         <option selected="true">Winxed</option>
