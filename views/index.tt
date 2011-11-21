@@ -1,5 +1,5 @@
 <h1>What do you want to create?</h1>
-<form action="/submit" method="get">
+<form action="/submit" method="POST">
 <div id="newlang">
     <input value="checked" type="checkbox" name="advanced" id="advanced_control" onclick="$('#newlang-options').toggle('slow', 'swing')">
   <font size="large">A new Parrot High Level Language (HLL)</font> <br/>

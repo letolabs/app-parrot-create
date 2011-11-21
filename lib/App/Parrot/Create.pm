@@ -8,7 +8,7 @@ get '/' => sub {
     template 'index';
 };
 
-get '/submit' => sub {
+post '/submit' => sub {
     my ($name, $builder, $harness) = map { param($_) } qw/language_name builder test_harness/;
 
     $name =~ s/[^A-z]*//g;
