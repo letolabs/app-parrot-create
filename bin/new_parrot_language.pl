@@ -162,7 +162,7 @@ sub start_new_file {
         mkpath( [ $filedir ], 0, 0777 );
     }
     print "creating $filepath\n";
-    open $fh, '>', $filepath;
+    open $fh, '>', $filepath or die $!;
 
     return;
 }
