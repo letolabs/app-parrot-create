@@ -1,6 +1,9 @@
 # App::Parrot::Create
 
-A web app to foster starting new creations with Parrot Virtual Machine.
+A Perl 5 web application to foster starting new creations with Parrot Virtual Machine.
+
+It will eventually live where like create.parrot.org and be a portal for new and returning
+Parrot developers.
 
 Dependencies are currently Dancer 1.3.
 
