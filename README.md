@@ -19,6 +19,13 @@ Dependencies are currently Dancer 1.3.
 # Running
 
     perl bin/app.pl
+    
+# Bugs
+
+Watch out for bugs! Unfinished refactoring has left the master branch in a non-working state.
+
+GSoC students are currently being deployed to fix some of these bugs and bring this important
+project back to life.
 
 # Viewing
 
