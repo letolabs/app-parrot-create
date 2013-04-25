@@ -28,7 +28,7 @@ post '/submit' => sub {
     system @args;
 
     my $zip        = Archive::Zip->new();
-    my $dir_member = $zip->addDirectory("$dir/");
+    my $dir_member = $zip->addTree("$dir/");
 
     debug("Going to write a zip file to $dir.zip");
     unless ( $zip->writeToFileNamed("/tmp/$time-$name.zip") == AZ_OK ) {
