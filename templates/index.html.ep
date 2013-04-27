@@ -1,3 +1,6 @@
+%layout 'main';
+%title 'App::Parrot::Create';
+
 <h1>What do you want to create?</h1>
 <form action="/submit" method="POST">
 <div id="newlang">

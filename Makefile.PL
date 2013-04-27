@@ -1,21 +1,23 @@
 use strict;
 use warnings;
+
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME                => 'App::Parrot::Create',
-    AUTHOR              => q{YOUR NAME <youremail@example.com>},
-    VERSION_FROM        => 'lib/App/Parrot/Create.pm',
-    ABSTRACT            => 'YOUR APPLICATION ABSTRACT',
-    ($ExtUtils::MakeMaker::VERSION >= 6.3002
-      ? ('LICENSE'=> 'perl')
-      : ()),
-    PL_FILES            => {},
-    PREREQ_PM => {
-        'Test::More' => 0,
-        'YAML'       => 0,
-        'Dancer'     => 1.3040,
+  ABSTRACT  => 'App::Parrot::Create',
+  AUTHOR    => 'Jonathan "Duke" Leto <jonathan@leto.net>',
+  LICENSE   => 'perl',
+  VERSION   => '0.01',
+  PREREQ_PM => {
+            'Mojolicious' => '3.85',
+            'YAML'        => 0,
+            'Archive::Zip'=> 0,
+  },
+  BUILD_REQUIRES => {'Test::Most'      => 0},
+  META_MERGE =>{
+        resources => {
+            repository  => 'http://github.com/leto/app-parrot-create',
+        },
     },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'App-Parrot-Create-*' },
+  test      => {TESTS => 't/*.t'}
 );

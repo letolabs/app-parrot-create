@@ -1,0 +1,7 @@
+%layout 'main';
+%title 'App::Parrot::Create';
+
+Submit template
+<%= $name %>
+<%= $builder %>
+<%= $harness %>
