@@ -12,6 +12,7 @@ WriteMakefile(
             'Mojolicious' => '3.85',
             'YAML'        => 0,
             'Archive::Zip'=> 0,
+            'Mojolicious::Plugin::YamlConfig' => '0.1.5'
   },
   BUILD_REQUIRES => {'Test::Most'      => 0},
   META_MERGE =>{

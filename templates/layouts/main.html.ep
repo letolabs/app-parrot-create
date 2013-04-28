@@ -2,8 +2,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<title>App::Parrot::Create</title>
+<meta http-equiv="Content-type" content="text/html; charset=<%= app->config->{charset} %>" />
+<title><%= app->config->{appname} %></title>
 <link rel="stylesheet" href="/css/style.css" />
 
 <!-- Grab Google CDN's jQuery. fall back to local if necessary -->

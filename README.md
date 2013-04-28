@@ -1,5 +1,6 @@
 # Depending on #
-    Mojolicious::Lite
+    Mojolicious
+    Mojolicious::Plugin::YamlConfig
     
 # INSTALL #
     perl Makefile.PL
@@ -7,11 +8,12 @@
     
 # TEST #
     make test
+
+# CLEAR #
+    make clean
     
 # RUN #
     perl ./app-parrot-create.pl daemon
-    or
-    morbo ./app-parrot-create.pl
     
 # VIEW #
     http://127.0.0.1:3000

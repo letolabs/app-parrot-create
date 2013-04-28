@@ -9,6 +9,8 @@ use autodie qw/:all/;
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
 
+plugin 'yaml_config';
+
 get '/' => 'index';
 
 post '/submit' => sub {
@@ -36,8 +38,6 @@ post '/submit' => sub {
     }
 
     $self->stash(name => $name, builder => $builder, harness => $harness);
-    #template 'submit',
-    #    { name => $name, builder => $builder, harness => $harness };
-};
+}=>'submit';
 
 app->start;
