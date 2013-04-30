@@ -2,7 +2,7 @@ use Test::More;
 use Test::Mojo;
 
 use FindBin;
-require "$FindBin::Bin/../app-parrot-create.pl";
+require "$FindBin::Bin/../app-parrot-create";
 
 my $t = Test::Mojo->new;
 $t->get_ok('/')->status_is(200);
