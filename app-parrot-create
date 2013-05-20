@@ -1,17 +1,40 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
+
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use File::Temp qw/tempfile tempdir/;
 use File::Spec::Functions;
 use File::Path qw/make_path/;
 use autodie qw/:all/;
+use Data::Dumper;
 
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
 
 plugin 'yaml_config';
 
-get '/' => 'index';
+plugin 'validator' => {
+    messages => {
+        REQUIRED                 => 'This field is required',
+        LENGTH_CONSTRAINT_FAILED => 'Too big'
+    }
+};
+
+get '/' => sub {
+    my $self = shift;
+    
+    my $validator = $self->create_validator;
+    $validator->field('username')->required(1)->length(3, 20);
+
+    return unless $self->validate($validator)
+}=> 'index';
+
+post '/' => sub {
+    my $self = shift;
+    
+    $self->app->log->debug("Post is contribute");
+    
+} => 'index' ;
 
 post '/submit' => sub {
     my $self = shift;

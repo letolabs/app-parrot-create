@@ -1,7 +1,171 @@
 %layout 'main';
-%title 'App::Parrot::Create';
 
-<h1>What do you want to create?</h1>
+<div class="masthead">
+        <ul class="nav nav-pills pull-right">
+                <li id="newlang" class="active"><a href="#">High Level Language</a></li>
+                <li id="newlib"><a href="#">Parrot Library</a></li>
+        </ul>
+        <h3 class="muted">Parrot creater</h3>
+</div>
+
+<hr>
+
+<div id="newlib-content" class="row-fluid" style="display: none" >
+    <div id="newlib-info" class="span8 hero-unit column">
+        <h1>Parrot library</h1>
+        <p>Some information about parrot library.</p>
+        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+    </div>
+    
+    <div id="newlib-options" class="well span4 column">
+
+        <label class="control-label" for="libName">Library Name:</label>
+        <div class="controls">
+            <input class="input" name="libName" type="text" placeholder="Name"> 
+        </div>
+
+        <label class="control-label" for="libBuilder">Library Builders:</label>
+        <div class="controls">
+            <select name="libBuilder">
+                <option selected="true">Winxed</option>
+                <option>NQP (Not Quite Perl 6)</option>
+                <option>PIR (Parrot Intermediate Representation)</option>
+                <option>Perl 5</option>
+            </select>
+        </div>
+
+        <label class="control-label" for="libTest">Test Suite:</label>
+        <div class="controls"> 
+            <select name="libTest">
+                <option selected="true">Rosella (Winxed)</option>
+                <option>Rosella (NQP)</option>
+                <option>Perl 5</option>
+            </select>
+        </div>
+
+        <br/>
+
+        <form action="/" method="post">
+            <div align="center">
+                <button class="btn btn-large btn-success" type="submit">Download</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="newlang-content" class="row-fluid" >
+    <div id="newlang-info" class="span8 hero-unit column">
+        <h1>High Level Language</h1>
+        <p>Some info about HLL.</p>
+        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+    </div>
+    
+    <div id="newlang-options" class="well span4 column">
+      
+        <label class="control-label" for="hllName">HLL Name:</label>
+        <div class="controls">
+            <input class="input" name="hllName" type="text" placeholder="Name"> 
+        </div>
+      
+        <label class="control-label" for="hllBuilder">HLL Builders:</label>
+        <div class="controls">
+            <select name="hllBuilder">
+                <option selected="true">Winxed</option>
+                <option>NQP (Not Quite Perl 6)</option>
+                <option>PIR (Parrot Intermediate Representation)</option>
+                <option>Perl 5</option>
+            </select>
+        </div>
+      
+        <label class="control-label" for="hllTest">Test Harness:</label>
+        <div class="controls"> 
+            <select name="hllTest">
+                <option selected="true">Rosella (Winxed)</option>
+                <option>Rosella (NQP)</option>
+                <option>Perl 5</option>
+            </select>
+        </div>
+
+        <br/>
+
+        <form action="/" method="post">
+            <div align="center">
+                <button class="btn btn-large btn-success" type="submit">Download</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<hr/>
+
+<div class="container-fluid well">
+    <div class="row-fluid">
+        <div class="span4 column">
+            <h4><a class="btn-link" href="#">Build Systems</a></h4>
+            
+            <h5><a class="btn-link" href="#">Winxed</a></h5>
+            <p>Description of Winxed Build System</p>
+            <h5><a class="btn-link" href="#">NQR</a></h5>
+            <p>Description of NQR Build System</p>
+            
+            <h5><a class="btn-link" href="#">PIR</a></h5>
+            <p>Description of PIR Build System</p>
+            
+            <h5><a class="btn-link" href="#">Perl5</a></h5>
+            <p>Description of Perl5 Build System</p>
+        </div>
+    
+        <div class="span4 column">
+            <h4><a class="btn-link" href="#">Test Systems</a></h4>
+            
+            <h5><a class="btn-link" href="#">Rosella(Winxed)</a></h5>
+            <p>Description of Rosella(Winxed) Test System</p>
+            
+            <h5><a class="btn-link" href="#">Rosella(NQR)/a></h5>
+            <p>Description of Rosella(NQR) Test System</p>
+            
+            <h5><a class="btn-link" href="#">Perl5</a></h5>
+            <p>Description of Perl5 Test System</p>
+        </div>
+        
+        <div class="span4 column">
+            <h4><a class="btn-link" href="#">Options</a></h4>
+            
+            <h5><a class="btn-link" href="#">Custom PMCs</a></h5>
+            <p>Description of Custom PMCs</p>
+            
+            <h5><a class="btn-link" href="#">Custom ops</a></h5>
+            <p>Description of Custom ops</p>
+            
+            <h5><a class="btn-link" href="#">Design Doc templates (POD)</a></h5>
+            <p>Description of Design Doc templates (POD)</p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('ul.nav > li').click(function (e) {
+            e.preventDefault();
+            $('ul.nav > li').removeClass('active');
+            $(this).addClass('active');
+            
+            $('#newlang-content').hide();
+            $('#newlib-content').hide()
+            
+            if ( this.id == "newlang") {
+                $('#newlang-content').show();
+            }
+            else if (this.id == "newlib") {
+                $('#newlib-content').show()
+            }
+        });            
+    });
+</script>
+    
+
+<!--<h1>What do you want to create?</h1>
 <form action="/submit" method="POST">
 <div id="newlang">
     <input value="checked" type="checkbox" name="advanced" id="advanced_control" onclick="$('#newlang-options').toggle('slow', 'swing')">
@@ -48,4 +212,4 @@
     </div>
 </div>
 <input type="submit" value="Create!">
-</form>
+</form>-->
