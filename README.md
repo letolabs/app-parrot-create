@@ -1,6 +1,7 @@
 # Depending on #
     Mojolicious
     Mojolicious::Plugin::YamlConfig
+    Mojolicious::Plugin::RenderFile
     
 # INSTALL #
     perl Makefile.PL

@@ -18,36 +18,36 @@
     </div>
     
     <div id="newlib-options" class="well span4 column">
-
-        <label class="control-label" for="libName">Library Name:</label>
-        <div class="controls">
-            <input class="input" name="libName" type="text" placeholder="Name"> 
-        </div>
-
-        <label class="control-label" for="libBuilder">Library Builders:</label>
-        <div class="controls">
-            <select name="libBuilder">
-                <option selected="true">Winxed</option>
-                <option>NQP (Not Quite Perl 6)</option>
-                <option>PIR (Parrot Intermediate Representation)</option>
-                <option>Perl 5</option>
-            </select>
-        </div>
-
-        <label class="control-label" for="libTest">Test Suite:</label>
-        <div class="controls"> 
-            <select name="libTest">
-                <option selected="true">Rosella (Winxed)</option>
-                <option>Rosella (NQP)</option>
-                <option>Perl 5</option>
-            </select>
-        </div>
-
-        <br/>
-
         <form action="/" method="post">
+
+            <label class="control-label" for="lib_name">Library Name:</label>
+            <div class="controls">
+                <input class="input" name="lib_name" type="text" placeholder="Name"> 
+            </div>
+    
+            <label class="control-label" for="lib_builder">Library Builders:</label>
+            <div class="controls">
+                <select name="lib_builder">
+                    <option selected="true">Winxed</option>
+                    <option>NQP (Not Quite Perl 6)</option>
+                    <option>PIR (Parrot Intermediate Representation)</option>
+                    <option>Perl 5</option>
+                </select>
+            </div>
+    
+            <label class="control-label" for="lib_test">Test Suite:</label>
+            <div class="controls"> 
+                <select name="lib_test">
+                    <option selected="true">Rosella (Winxed)</option>
+                    <option>Rosella (NQP)</option>
+                    <option>Perl 5</option>
+                </select>
+            </div>
+    
+            <br/>
+
             <div align="center">
-                <button class="btn btn-large btn-success" type="submit">Download</button>
+                <button class="btn btn-large btn-success" name="lib_btn" type="submit">Download</button>
             </div>
         </form>
     </div>
@@ -61,36 +61,36 @@
     </div>
     
     <div id="newlang-options" class="well span4 column">
-      
-        <label class="control-label" for="hllName">HLL Name:</label>
-        <div class="controls">
-            <input class="input" name="hllName" type="text" placeholder="Name"> 
-        </div>
-      
-        <label class="control-label" for="hllBuilder">HLL Builders:</label>
-        <div class="controls">
-            <select name="hllBuilder">
-                <option selected="true">Winxed</option>
-                <option>NQP (Not Quite Perl 6)</option>
-                <option>PIR (Parrot Intermediate Representation)</option>
-                <option>Perl 5</option>
-            </select>
-        </div>
-      
-        <label class="control-label" for="hllTest">Test Harness:</label>
-        <div class="controls"> 
-            <select name="hllTest">
-                <option selected="true">Rosella (Winxed)</option>
-                <option>Rosella (NQP)</option>
-                <option>Perl 5</option>
-            </select>
-        </div>
-
-        <br/>
-
         <form action="/" method="post">
+
+            <label class="control-label" for="hll_name">HLL Name:</label>
+            <div class="controls">
+                <input class="input" name="hll_name" type="text" placeholder="Name"> 
+            </div>
+          
+            <label class="control-label" for="hll_builder">HLL Builders:</label>
+            <div class="controls">
+                <select name="hll_builder">
+                    <option selected="true">Winxed</option>
+                    <option>NQP (Not Quite Perl 6)</option>
+                    <option>PIR (Parrot Intermediate Representation)</option>
+                    <option>Perl 5</option>
+                </select>
+            </div>
+          
+            <label class="control-label" for="hll_test">Test Harness:</label>
+            <div class="controls"> 
+                <select name="hll_test">
+                    <option selected="true">Rosella (Winxed)</option>
+                    <option>Rosella (NQP)</option>
+                    <option>Perl 5</option>
+                </select>
+            </div>
+    
+            <br/>
+
             <div align="center">
-                <button class="btn btn-large btn-success" type="submit">Download</button>
+                <button class="btn btn-large btn-success" name="hll_btn" type="submit">Download</button>
             </div>
         </form>
 
@@ -163,53 +163,3 @@
         });            
     });
 </script>
-    
-
-<!--<h1>What do you want to create?</h1>
-<form action="/submit" method="POST">
-<div id="newlang">
-    <input value="checked" type="checkbox" name="advanced" id="advanced_control" onclick="$('#newlang-options').toggle('slow', 'swing')">
-  <font size="large">A new Parrot High Level Language (HLL)</font> <br/>
- <div id="newlang-options" style="">
-    - Name:<input type="text" size="30" name="language_name"> <br/>
-    - Builders:
-        <select name="builder">
-        <option selected="true">Winxed</option>
-        <option>NQP (Not Quite Perl 6)</option>
-        <option>PIR (Parrot Intermediate Representation)</option>
-        <option>Perl 5</option>
-        </select><br/>
-    - Test Harness: <select name="test_harness">
-            <option>Rosella (Winxed)</option>
-            <option>Rosella (NQP)</option>
-            <option>Perl 5</option>
-            </select><br/>
-    - Options:<br/>
-        <input value="unchecked" type="checkbox" name="custom_pmc">Custom PMCs<br/>
-        <input value="unchecked" type="checkbox" name="custom_ops">Custom ops<br/>
-        <input value="unchecked" type="checkbox" name="docs">Design Doc templates (POD)<br/>
-        <br/>
-    - <a href="https://github.com/benabik/cish">Documentation</a> for customizing your new HLL
-    </div>
-</div>
-<div id="newlib">
-    <input value="unchecked" type="checkbox" name="advanced" id="advanced_control" onclick="$('#newlib-options').toggle('slow', 'swing')">
-<font size="large">A new Parrot library</font></h1><br>
- <div id="newlib-options" style="display:none">
-    - Name:<input type="text" size="30"> <br/>
-    - Builders:
-        <select>
-        <option selected="true">Winxed</option>
-        <option>NQP (Not Quite Perl 6)</option>
-        <option>PIR (Parrot Intermediate Representation)</option>
-        <option>Perl 5</option>
-        </select><br/>
-    - Test suite: <select>
-            <option>Rosella (Winxed)</option>
-            <option>Rosella (NQP)</option>
-            <option>Perl 5</option>
-            </select><br/>
-    </div>
-</div>
-<input type="submit" value="Create!">
-</form>-->
