@@ -19,10 +19,13 @@
     
     <div id="newlib-options" class="well span4 column">
         <form action="/" method="post">
-
-            <label class="control-label" for="lib_name">Library Name:</label>
-            <div class="controls">
-                <input class="input" name="lib_name" type="text" placeholder="Name"> 
+            
+            <div class="control-group" id="lib-name-group">
+                <label class="control-label" for="lib_name">Library Name:</label>
+                <div class="controls">
+                    <input class="input" name="lib_name" id="lib_name" type="text" placeholder="Name">
+                    <span class="help-inline" id="lib-msg"></span>
+                </div>
             </div>
     
             <label class="control-label" for="lib_builder">Library Builders:</label>
@@ -47,7 +50,7 @@
             <br/>
 
             <div align="center">
-                <button class="btn btn-large btn-success" name="lib_btn" type="submit">Download</button>
+                <button class="btn btn-large btn-success" name="lib_btn" id="lib_btn" disabled="disabled" type="submit">Download</button>
             </div>
         </form>
     </div>
@@ -62,10 +65,13 @@
     
     <div id="newlang-options" class="well span4 column">
         <form action="/" method="post">
-
-            <label class="control-label" for="hll_name">HLL Name:</label>
-            <div class="controls">
-                <input class="input" name="hll_name" type="text" placeholder="Name"> 
+            
+            <div class="control-group" id="hll-name-group">
+                <label class="control-label" for="hll_name">HLL Name:</label>
+                <div class="controls">
+                    <input class="input" name="hll_name" id="hll_name" type="text" placeholder="Name">
+                    <span class="help-inline" id="hll-msg"></span>
+                </div>
             </div>
           
             <label class="control-label" for="hll_builder">HLL Builders:</label>
@@ -90,7 +96,7 @@
             <br/>
 
             <div align="center">
-                <button class="btn btn-large btn-success" name="hll_btn" type="submit">Download</button>
+                <button class="btn btn-large btn-success" disabled="disabled" name="hll_btn" id="hll_btn" type="submit">Download</button>
             </div>
         </form>
 
@@ -146,6 +152,45 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        
+        var hll_name = false;
+        var lib_name = false;
+        
+        $('#hll_name').bind('blur keyup', function() {
+            $('#hll-msg').html("");
+            var name = $('#hll_name').val();
+            
+            if (name == '') {
+                hll_name = false;
+                $('#hll-name-group').addClass('error');
+                $('#hll-msg').append('Field is empty');
+            }
+            else {
+                hll_name = true;
+                $('#hll-name-group').removeClass('error');
+            }
+            
+            enableDownload(hll_name,'#hll_btn');
+        });
+        
+        $('#lib_name').bind('blur keyup', function() {
+            $('#lib-msg').html("");
+            var name = $('#lib_name').val();
+            
+            if (name == '') {
+                lib_name = false;
+                $('#lib-name-group').addClass('error');
+                $('#lib-msg').append('Field is empty');
+            }
+            else {
+                lib_name = true;
+                $('#lib-name-group').removeClass('error');
+            }
+            
+            enableDownload(lib_name,'#lib_btn');
+        });
+        
+        
         $('ul.nav > li').click(function (e) {
             e.preventDefault();
             $('ul.nav > li').removeClass('active');
@@ -160,6 +205,15 @@
             else if (this.id == "newlib") {
                 $('#newlib-content').show()
             }
-        });            
+        });
+        
+        function enableDownload(enable,btn_id) {
+            if (enable) {
+                $(btn_id).removeAttr('disabled');
+            }
+            else {
+                $(btn_id).attr('disabled', 'disabled'); 
+            }
+        };
     });
 </script>
