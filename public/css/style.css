@@ -9,7 +9,6 @@
 
 .btn-link {
     color: black;
-    text-decoration: none !important;
 }
 
 .well [class^="span"] + [class^="span"] {

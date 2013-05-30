@@ -19,7 +19,7 @@
     
     <div id="newlib-options" class="well span4 column">
         <form action="/" method="post">
-            
+
             <div class="control-group" id="lib-name-group">
                 <label class="control-label" for="lib_name">Library Name:</label>
                 <div class="controls">
@@ -28,29 +28,31 @@
                 </div>
             </div>
     
-            <label class="control-label" for="lib_builder">Library Builders:</label>
-            <div class="controls">
-                <select name="lib_builder">
-                    <option selected="true">Winxed</option>
-                    <option>NQP (Not Quite Perl 6)</option>
-                    <option>PIR (Parrot Intermediate Representation)</option>
-                    <option>Perl 5</option>
-                </select>
+            <div class="control-group">
+                <label class="control-label" for="lib_builder">Library Builders:</label>
+                <div class="controls">
+                    <select name="lib_builder">
+                        <option selected="true">Winxed</option>
+                        <option>NQP (Not Quite Perl 6)</option>
+                        <option>PIR (Parrot Intermediate Representation)</option>
+                        <option>Perl 5</option>
+                    </select>
+                </div>
             </div>
     
-            <label class="control-label" for="lib_test">Test Suite:</label>
-            <div class="controls"> 
-                <select name="lib_test">
-                    <option selected="true">Rosella (Winxed)</option>
-                    <option>Rosella (NQP)</option>
-                    <option>Perl 5</option>
-                </select>
+            <div class="control-group">
+                <label class="control-label" for="lib_test">Test Suite:</label>
+                <div class="controls"> 
+                    <select name="lib_test">
+                        <option selected="true">Rosella (Winxed)</option>
+                        <option>Rosella (NQP)</option>
+                        <option>Perl 5</option>
+                    </select>
+                </div>
             </div>
-    
-            <br/>
 
             <div align="center">
-                <button class="btn btn-large btn-success" name="lib_btn" id="lib_btn" disabled="disabled" type="submit">Download</button>
+                <button class="btn btn-large btn-success" name="lib" id="lib_btn" disabled="disabled" type="submit">Download</button>
             </div>
         </form>
     </div>
@@ -60,7 +62,7 @@
     <div id="newlang-info" class="span8 hero-unit column">
         <h1>High Level Language</h1>
         <p>Some info about HLL.</p>
-        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
     
     <div id="newlang-options" class="well span4 column">
@@ -73,30 +75,43 @@
                     <span class="help-inline" id="hll-msg"></span>
                 </div>
             </div>
-          
-            <label class="control-label" for="hll_builder">HLL Builders:</label>
-            <div class="controls">
-                <select name="hll_builder">
-                    <option selected="true">Winxed</option>
-                    <option>NQP (Not Quite Perl 6)</option>
-                    <option>PIR (Parrot Intermediate Representation)</option>
-                    <option>Perl 5</option>
-                </select>
+            
+            <div class="control-group">
+                <label class="control-label" for="hll_builder">HLL Builders:</label>
+                <div class="controls">
+                    <select name="hll_builder">
+                        <option selected="true">Winxed</option>
+                        <option>NQP (Not Quite Perl 6)</option>
+                        <option>PIR (Parrot Intermediate Representation)</option>
+                        <option>Perl 5</option>
+                    </select>
+                </div>
             </div>
-          
-            <label class="control-label" for="hll_test">Test Harness:</label>
-            <div class="controls"> 
-                <select name="hll_test">
-                    <option selected="true">Rosella (Winxed)</option>
-                    <option>Rosella (NQP)</option>
-                    <option>Perl 5</option>
-                </select>
+            
+            <div class="control-group">
+                <label class="control-label" for="hll_test">Test Harness:</label>
+                <div class="controls"> 
+                    <select name="hll_test">
+                        <option selected="true">Rosella (Winxed)</option>
+                        <option>Rosella (NQP)</option>
+                        <option>Perl 5</option>
+                    </select>
+                </div>
             </div>
     
-            <br/>
+            <div class="control-group">
+                <label class="control-label">Options:</label>
+                <div class="controls">
+                    <div class="btn-group" data-toggle="buttons-checkbox">
+                        <button name="pmc" type="button" class="btn btn-toggle">Custom PMCs</button>
+                        <button name="ops" type="button" class="btn btn-toggle">Custom ops</button>
+                        <button name="pod" type="button" class="btn btn-toggle">Doc templates</button>
+                    </div>
+                </div>
+            </div>
 
             <div align="center">
-                <button class="btn btn-large btn-success" disabled="disabled" name="hll_btn" id="hll_btn" type="submit">Download</button>
+                <button class="btn btn-large btn-success" disabled="disabled" name="hll" id="hll_btn" type="submit">Download</button>
             </div>
         </form>
 
@@ -109,43 +124,24 @@
     <div class="row-fluid">
         <div class="span4 column">
             <h4><a class="btn-link" href="#">Build Systems</a></h4>
-            
-            <h5><a class="btn-link" href="#">Winxed</a></h5>
-            <p>Description of Winxed Build System</p>
-            <h5><a class="btn-link" href="#">NQR</a></h5>
-            <p>Description of NQR Build System</p>
-            
-            <h5><a class="btn-link" href="#">PIR</a></h5>
-            <p>Description of PIR Build System</p>
-            
-            <h5><a class="btn-link" href="#">Perl5</a></h5>
-            <p>Description of Perl5 Build System</p>
+            <p><a class="btn-link" href="#">Winxed</a></p>
+            <p><a class="btn-link" href="#">NQR</a></p>
+            <p><a class="btn-link" href="#">PIR</a></p>
+            <p><a class="btn-link" href="#">Perl5</a></p>
         </div>
     
         <div class="span4 column">
             <h4><a class="btn-link" href="#">Test Systems</a></h4>
-            
-            <h5><a class="btn-link" href="#">Rosella(Winxed)</a></h5>
-            <p>Description of Rosella(Winxed) Test System</p>
-            
-            <h5><a class="btn-link" href="#">Rosella(NQR)/a></h5>
-            <p>Description of Rosella(NQR) Test System</p>
-            
-            <h5><a class="btn-link" href="#">Perl5</a></h5>
-            <p>Description of Perl5 Test System</p>
+            <p><a class="btn-link" href="#">Rosella(Winxed)</a></p>
+            <p><a class="btn-link" href="#">Rosella(NQR)</a></p>
+            <p><a class="btn-link" href="#">Perl5</a></p>
         </div>
         
         <div class="span4 column">
             <h4><a class="btn-link" href="#">Options</a></h4>
-            
-            <h5><a class="btn-link" href="#">Custom PMCs</a></h5>
-            <p>Description of Custom PMCs</p>
-            
-            <h5><a class="btn-link" href="#">Custom ops</a></h5>
-            <p>Description of Custom ops</p>
-            
-            <h5><a class="btn-link" href="#">Design Doc templates (POD)</a></h5>
-            <p>Description of Design Doc templates (POD)</p>
+            <p><a class="btn-link" href="#">Custom PMCs</a></p>
+            <p><a class="btn-link" href="#">Custom ops</a></p>
+            <p><a class="btn-link" href="#">Design Doc templates (POD)</a></p>
         </div>
     </div>
 </div>
@@ -172,7 +168,7 @@
             
             enableDownload(hll_name,'#hll_btn');
         });
-        
+
         $('#lib_name').bind('blur keyup', function() {
             $('#lib-msg').html("");
             var name = $('#lib_name').val();
@@ -189,13 +185,12 @@
             
             enableDownload(lib_name,'#lib_btn');
         });
-        
-        
+
         $('ul.nav > li').click(function (e) {
             e.preventDefault();
             $('ul.nav > li').removeClass('active');
             $(this).addClass('active');
-            
+
             $('#newlang-content').hide();
             $('#newlib-content').hide()
             
@@ -206,6 +201,10 @@
                 $('#newlib-content').show()
             }
         });
+
+        $('button').click(function () {
+            $(this).toggleClass("btn-primary");
+        });     
         
         function enableDownload(enable,btn_id) {
             if (enable) {

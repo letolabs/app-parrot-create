@@ -20,12 +20,11 @@ get '/' => 'index';
 post '/' => sub {
     my $self = shift;
     
-    $self->app->log->debug("Post is contribute");
     my ($name, $builder, $harness);
-    if (defined $self->param("hll_btn")) {
+    if (defined $self->param("hll")) {
         ($name, $builder, $harness) = map { $self->param($_) } qw/hll_name hll_builder hll_test/;
     }
-    elsif(defined $self->param("lib_btn")){
+    elsif(defined $self->param("lib")){
         ($name, $builder, $harness) = map { $self->param($_) } qw/lib_name lib_builder lib_test/;
     }
     
