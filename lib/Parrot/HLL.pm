@@ -32,5 +32,15 @@ has 'pod' => (
     default     => '0'
 );
 
+=head2 generate()
+Args: none
+Returns: zip hll file path
+Description:
+Generate a new zip hll project
+=cut
+method generate() {
+    
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;

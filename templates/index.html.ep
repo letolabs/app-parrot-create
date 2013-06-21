@@ -66,7 +66,7 @@
     </div>
     
     <div id="newlang-options" class="well span4 column">
-        <form action="/" method="post">
+        <form id="hll_form" action="/" method="post">
             
             <div class="control-group" id="hll-name-group">
                 <label class="control-label" for="hll_name">HLL Name:</label>
@@ -101,12 +101,10 @@
     
             <div class="control-group">
                 <label class="control-label">Options:</label>
-                <div class="controls">
-                    <div class="btn-group" data-toggle="buttons-checkbox">
-                        <button name="pmc" type="button" class="btn btn-toggle">Custom PMCs</button>
-                        <button name="ops" type="button" class="btn btn-toggle">Custom ops</button>
-                        <button name="pod" type="button" class="btn btn-toggle">Doc templates</button>
-                    </div>
+                <div class="controls btn-group" data-toggle="buttons-checkbox">
+                    <button id="pmc" name="pmc" value="0" type="button" class="btn btn-toggle">Custom PMCs</button>
+                    <button id="ops" name="ops" value="0" type="button" class="btn btn-toggle">Custom ops</button>
+                    <button id="doc" name="doc" value="0" type="button" class="btn btn-toggle">Doc templates</button>
                 </div>
             </div>
 
@@ -151,6 +149,29 @@
         
         var hll_name = false;
         var lib_name = false;
+        
+        var with_pmc = 0;
+        var with_ops = 0;
+        var with_doc = 0;
+        
+        $('#hll_form').submit(function(){
+            $('<input />').attr('type', 'hidden')
+                .attr('name', 'with_pmc')
+                .attr('value', +with_pmc)
+                .appendTo('#hll_form');
+                
+            $('<input />').attr('type', 'hidden')
+                .attr('name', 'with_ops')
+                .attr('value', +with_ops)
+                .appendTo('#hll_form');
+                
+            $('<input />').attr('type', 'hidden')
+                .attr('name', 'with_doc')
+                .attr('value', +with_doc)
+                .appendTo('#hll_form');
+
+            return true;
+        });
         
         $('#hll_name').bind('blur keyup', function() {
             $('#hll-msg').html("");
@@ -204,6 +225,15 @@
 
         $('button').click(function () {
             $(this).toggleClass("btn-primary");
+            if ($(this).attr("name") == "pmc") {
+                with_pmc = !with_pmc;
+            }
+            else if ($(this).attr("name") == "ops") {
+                with_ops = !with_ops;
+            }
+            else if ($(this).attr("name") == "doc") {
+                with_doc = !with_doc;
+            }
         });     
         
         function enableDownload(enable,btn_id) {

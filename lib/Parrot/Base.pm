@@ -30,4 +30,6 @@ has 'test_system' => (
     default     => 'Perl 5'
 );
 
+requires 'generate';
+
 1;
