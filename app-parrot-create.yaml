@@ -22,3 +22,12 @@ template: "simple"
 #     start_tag: '[%'
 #     end_tag:   '%]'
 
+#Mojolicious uses a secret passphrase for security features such as signed cookies
+#md5("Parrot Foundation") = "8bf2d0c8051519c9bdbb574ed61a6217"
+passphrase: "8bf2d0c8051519c9bdbb574ed61a6217"
+
+#File path on hll template file
+hll_template: "project-templates/hll.parrot"
+
+#File path on library template file
+library_template: "project-templates/library.parrot"

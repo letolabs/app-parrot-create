@@ -8,7 +8,7 @@ use Method::Signatures;
 
 with 'Parrot::Base';
 
-has 'pmc' => (
+has 'with_pmc' => (
     isa         => 'Bool',
     is          => 'rw',
     required    => 1,
@@ -16,7 +16,7 @@ has 'pmc' => (
     default     => '0'
 );
 
-has 'ops' => (
+has 'with_ops' => (
     isa         => 'Bool',
     is          => 'rw',
     required    => 1,
@@ -24,22 +24,23 @@ has 'ops' => (
     default     => '0'
 );
 
-has 'pod' => (
+has 'with_doc' => (
     isa         => 'Bool',
     is          => 'rw',
     required    => 1,
-    predicate   => 'has_pod',
+    predicate   => 'has_doc',
     default     => '0'
 );
 
-=head2 generate()
-Args: none
-Returns: zip hll file path
-Description:
-Generate a new zip hll project
-=cut
-method generate() {
-    
+method init($name, $build_system, $test_system, $with_pmc, $with_ops, $with_doc) {
+    $self->name($name);
+    $self->build_system($build_system);
+    $self->test_system($test_system);
+    $self->with_pmc($with_pmc);
+    $self->with_ops($with_ops);
+    $self->with_doc($with_doc);
+
+    return 1;
 }
 
 no Moose;

@@ -7,14 +7,14 @@ use Method::Signatures;
 
 with 'Parrot::Base';
 
-=head2 generate()
-Args: none
-Returns: zip parrot library file path
-Description:Generate a new zip parrot library project
-=cut
-method generate() {
+method init($name, $build_system, $test_system) {
+    $self->name($name);
+    $self->build_system($build_system);
+    $self->test_system($test_system);
     
+    return 1;
 }
+
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
