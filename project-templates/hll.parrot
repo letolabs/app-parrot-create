@@ -118,6 +118,7 @@ SOURCES
 __PARROT_REVISION__
 Revision
 
+[% IF object.with_doc %]
 __doc/[% object.name %].pod__
 
 =head1 [% object.name %]
@@ -132,6 +133,7 @@ __doc/[% object.name %].pod__
 #   fill-column:78
 # End:
 # vim: expandtab shiftwidth=4:
+
 __doc/running.pod__
 
 =head1 Running
@@ -157,6 +159,7 @@ A number of additional options are available:
 #   fill-column:78
 # End:
 # vim: expandtab shiftwidth=4:
+[% END %]
 
 __dynext/.ignore__
 
@@ -377,6 +380,7 @@ sub say(*@args) {
     1;
 }
 
+[% IF object.with_pmc %]
 __src/pmc/[% object.name %].pmc__
 /*
 
@@ -566,7 +570,9 @@ the end of the vector.
  * End:
  * vim: expandtab shiftwidth=4:
  */
+[% END %]
 
+[% IF object.with_ops %]
 __src/ops/[% object.name %].ops__
 /*
  */
@@ -589,6 +595,7 @@ inline op [% object.name %]_pmc_addr(out INT, invar PMC) :base_core {
  * End:
  * vim: expandtab shiftwidth=4:
  */
+[% END %]
 
 __t/00-sanity.t__
 # This just checks that the basic parsing and call to builtin say() works.

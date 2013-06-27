@@ -22,7 +22,7 @@ post '/' => sub {
     if (defined $self->param("hll")) {
         ($name, $builder, $harness, $with_pmc, $with_ops, $with_doc)
                             = map { $self->param($_) } qw/hll_name hll_builder hll_test with_pmc with_ops with_doc/;
-
+                            
         my $hll = Parrot::HLL->new();
         $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc);
         $hll->template($self->app->config->{hll_template});
@@ -48,52 +48,5 @@ post '/' => sub {
         'format'     => 'zip' 
     );
 } => 'index';
-
-
-#use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
-#use File::Temp qw/tempfile tempdir/;
-#use File::Spec::Functions;
-#use File::Path qw/make_path/;
-#use autodie qw/:all/;
-#
-#post '/' => sub {
-#    my $self = shift;
-#    
-#    my ($name, $builder, $harness, $with_pmc, $with_ops, $with_doc);
-#    if (defined $self->param("hll")) {
-#        ($name, $builder, $harness, $with_pmc, $with_ops, $with_doc)
-#                            = map { $self->param($_) } qw/hll_name hll_builder hll_test with_pmc with_ops with_doc/;
-#    }
-#    elsif(defined $self->param("lib")){
-#        ($name, $builder, $harness) = map { $self->param($_) } qw/lib_name lib_builder lib_test/;
-#    }
-#    
-#    $name =~ s/[^A-z]*//g;
-#    
-#    my $time             = time;
-#    my $tmp_base = tempdir( "app-parrot-create-XXXXXXX", TMPDIR => 1,
-#        # CLEANUP => 1
-#    );
-#    my $dir      = "$tmp_base/$time/$name";
-#    
-#    $self->app->log->debug("Going to run bin/new_parrot_language.pl $name $dir");
-#    my @args = ($^X,"bin/new_parrot_language.pl",$name, $dir,
-#                "--with-doc $with_doc","--with-ops $with_ops","--with-pmc $with_pmc");
-#    system @args;
-#    
-#    my $zip        = Archive::Zip->new();
-#    my $dir_member = $zip->addTree("$dir/");
-#    
-#    $self->app->log->debug("Going to write a zip file to $dir.zip");
-#    unless ( $zip->writeToFileNamed("/tmp/$time-$name.zip") == AZ_OK ) {
-#        die 'write error';
-#    }
-#    
-#    $self->render_file(
-#                       'filepath'   => "/tmp/$time-$name.zip",
-#                       'format'     => "zip"  
-#    );
-#    
-#} => 'index';
 
 app->start;

@@ -105,6 +105,9 @@
                     <button id="pmc" name="pmc" value="0" type="button" class="btn btn-toggle">Custom PMCs</button>
                     <button id="ops" name="ops" value="0" type="button" class="btn btn-toggle">Custom ops</button>
                     <button id="doc" name="doc" value="0" type="button" class="btn btn-toggle">Doc templates</button>
+                    <input type="hidden" id="with_pmc" name="with_pmc" value="0">
+                    <input type="hidden" id="with_ops" name="with_ops" value="0">
+                    <input type="hidden" id="with_doc" name="with_doc" value="0">
                 </div>
             </div>
 
@@ -150,26 +153,15 @@
         var hll_name = false;
         var lib_name = false;
         
-        var with_pmc = 0;
-        var with_ops = 0;
-        var with_doc = 0;
+        var with_pmc = false;
+        var with_ops = false;
+        var with_doc = false;
         
         $('#hll_form').submit(function(){
-            $('<input />').attr('type', 'hidden')
-                .attr('name', 'with_pmc')
-                .attr('value', +with_pmc)
-                .appendTo('#hll_form');
+            $('#with_pmc').val(+with_pmc);
+            $('#with_ops').val(+with_ops);
+            $('#with_doc').val(+with_doc);
                 
-            $('<input />').attr('type', 'hidden')
-                .attr('name', 'with_ops')
-                .attr('value', +with_ops)
-                .appendTo('#hll_form');
-                
-            $('<input />').attr('type', 'hidden')
-                .attr('name', 'with_doc')
-                .attr('value', +with_doc)
-                .appendTo('#hll_form');
-
             return true;
         });
         
