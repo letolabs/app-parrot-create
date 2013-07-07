@@ -95,8 +95,7 @@ method generate_project($content_template) {
         my $line_template = shift @lines_template;
         last if ($line_template =~ /^__END__$/);
 
-        #TODO:
-        #Change normal for human
+        #TODO: Change normal for human
         if ($line_template =~ /^__(.*)__$/) {
             
             my ($volume, $dir, $file) = File::Spec->splitpath("$filepath/$1");
@@ -127,8 +126,7 @@ method generate_archive($path_to_project) {
     my $dir_member = $zip->addTree("$path_to_project/");
     my $time       = time;
 
-    #TODO:
-    #Change file path
+    #TODO: Change file path
     unless ( $zip->writeToFileNamed("/tmp/$time-".$self->name.".zip") == AZ_OK ) {
         die 'write error';
     }
