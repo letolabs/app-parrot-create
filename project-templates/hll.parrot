@@ -1,9 +1,54 @@
 __README__
-Language '[% object.name %]' was created with script and revision.
+Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %].
 
     $ parrot setup.pir
     $ parrot setup.pir test
 
+[% IF object.build_system == "Perl 5" %]
+
+[% END %]
+
+[% IF object.build_system == "Winxed" %]
+__setup.winxed__
+$include_const "iglobals.pasm";
+$loadlib "io_ops";
+
+function main[main](argv) {
+    var parrot_[% object.name %] = {
+        "name"              : '[% object.name %]',
+        "abstract"          : '',
+        "description"       : '',
+        "authority"         : '',
+        "copyright_holder"  : '',
+        "keywords"          : [],
+        "license_type"      : '',
+        "license_uri"       : '',
+        "checkout_uri"      : '',
+        "browser_uri"       : '',
+        "project_uri"       : '',
+        "pir_winxed"        : {},
+        "pbc_pir"           : {},
+        "inst_lib"          : [],
+        "installable_pbc"   : {},
+        "include_winxed"    : {},
+        "manifest_includes" : ["README.md", "setup.winxed"]
+    };
+  
+    if (argv[1] == "test")
+        do_test();
+}
+
+function do_test() {
+    int result;
+    ${ exit result };
+}
+[% END %]
+
+[% IF object.build_system == "NQP (Not Quite Perl 6)" %]
+
+[% END %]
+
+[% IF object.build_system == "PIR (Parrot Intermediate Representation)" %]
 __setup.pir__
 #!/usr/bin/env parrot
 
@@ -37,14 +82,10 @@ No Configure step, no Makefile generated.
 
     .local pmc config
     config = get_config()
-    $I0 = config['revision']
-    unless $I0 goto L1
-    unless reqsvn > $I0 goto L1
     $S1 = "Parrot revision r"
     $S0 = reqsvn
     $S1 .= $S0
     $S1 .= " required (currently r"
-    $S0 = $I0
     $S1 .= $S0
     $S1 .= ")\n"
     print $S1
@@ -114,56 +155,6 @@ SOURCES
 #   fill-column: 100
 # End:
 # vim: expandtab shiftwidth=4 ft=pir:
-
-__PARROT_REVISION__
-Revision
-
-[% IF object.with_doc %]
-__doc/[% object.name %].pod__
-
-=head1 [% object.name %]
-
-=head1 Design
-
-=head1 SEE ALSO
-
-=cut
-
-# Local Variables:
-#   fill-column:78
-# End:
-# vim: expandtab shiftwidth=4:
-
-__doc/running.pod__
-
-=head1 Running
-
-This document describes how to use the command line [% object.name %] program, which
-...
-
-=head2 Usage
-
-  parrot [% object.name %].pbc [OPTIONS] <input>
-
-or
-
-  parrot-[% object.name %]@exe [OPTIONS] <input>
-
-A number of additional options are available:
-
-  -q  Quiet mode; suppress output of summary at the end.
-
-=cut
-
-# Local Variables:
-#   fill-column:78
-# End:
-# vim: expandtab shiftwidth=4:
-[% END %]
-
-__dynext/.ignore__
-
-__[% object.name %]/.ignore__
 
 __[% object.name %].pir__
 
@@ -262,6 +253,59 @@ object.
 #   fill-column: 100
 # End:
 # vim: expandtab shiftwidth=4 ft=pir:
+
+
+[% END %]
+
+__PARROT_REVISION__
+Revision
+
+[% IF object.with_doc %]
+__doc/[% object.name %].pod__
+
+=head1 [% object.name %]
+
+=head1 Design
+
+=head1 SEE ALSO
+
+=cut
+
+# Local Variables:
+#   fill-column:78
+# End:
+# vim: expandtab shiftwidth=4:
+
+__doc/running.pod__
+
+=head1 Running
+
+This document describes how to use the command line [% object.name %] program, which
+...
+
+=head2 Usage
+
+  parrot [% object.name %].pbc [OPTIONS] <input>
+
+or
+
+  parrot-[% object.name %]@exe [OPTIONS] <input>
+
+A number of additional options are available:
+
+  -q  Quiet mode; suppress output of summary at the end.
+
+=cut
+
+# Local Variables:
+#   fill-column:78
+# End:
+# vim: expandtab shiftwidth=4:
+[% END %]
+
+__dynext/.ignore__
+
+__[% object.name %]/.ignore__
 
 __src/[% object.name %]/Grammar.pm__
 =begin overview
@@ -597,11 +641,19 @@ inline op [% object.name %]_pmc_addr(out INT, invar PMC) :base_core {
  */
 [% END %]
 
+[% IF object.test_system == "Perl 5" %]
 __t/00-sanity.t__
-# This just checks that the basic parsing and call to builtin say() works.
-say '1..4';
-say 'ok 1';
-say 'ok ', 2;
-say 'ok ', 2 + 1;
-say 'ok', ' ', 4;
+#!/usr/bin/env perl
+use Test::More;
+
+ok(print("Perl 5 test"),"Simple test");
+[% END %]
+
+[% IF object.test_system == "Rosella (Winxed)" %]
+
+[% END %]
+
+[% IF object.test_system == "Rosella (NQP)" %]
+
+[% END %]
 __END__
