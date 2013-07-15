@@ -9,10 +9,15 @@ WriteMakefile(
   LICENSE   => 'perl',
   VERSION   => '0.01',
   PREREQ_PM => {
-            'Mojolicious' => '3.85',
-            'YAML'        => 0,
-            'Archive::Zip'=> 0,
-            'Mojolicious::Plugin::YamlConfig' => '0.1.5'
+            'Mojolicious'                       => '3.85',
+            'Moose'                             => '2.0401',
+            'Moose::Role'                       => '2.0401',
+            'Method::Signatures'                => 0,
+            'YAML'                              => 0,
+            'Archive::Zip'                      => 0,
+            'Try::Tiny'                         => '0.16 ',
+            'Mojolicious::Plugin::YamlConfig'   => '0.1.5',
+            'Template'                          => '2.23'
   },
   BUILD_REQUIRES => {'Test::Most'      => 0},
   META_MERGE =>{

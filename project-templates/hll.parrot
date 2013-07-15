@@ -647,17 +647,16 @@ inline op [% object.name %]_pmc_addr(out INT, invar PMC) :base_core {
 
 [% IF object.test_system == "Perl 5" %]
 __t/00-sanity.t__
-#!/usr/bin/env perl
-use Test::More;
 
-ok(print("Perl 5 test"),"Simple test");
 [% END %]
 
 [% IF object.test_system == "Rosella (Winxed)" %]
+__t/00-sanity.t__
 
 [% END %]
 
 [% IF object.test_system == "Rosella (NQP)" %]
+__t/00-sanity.t__
 
 [% END %]
 __END__
