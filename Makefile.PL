@@ -15,7 +15,7 @@ WriteMakefile(
             'Method::Signatures'                => 0,
             'YAML'                              => 0,
             'Archive::Zip'                      => 0,
-            'Try::Tiny'                         => '0.16 ',
+            'Try::Tiny'                         => '0.16',
             'Mojolicious::Plugin::YamlConfig'   => '0.1.5',
             'Template'                          => '2.23'
   },
