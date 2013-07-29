@@ -4,11 +4,11 @@ Language '[% object.name %]' with [% object.build_system %] build system and [% 
     $ parrot setup.pir
     $ parrot setup.pir test
 
-[% IF object.build_system == "Perl 5" %]
+[% IF object.build_system == PERL5 %]
 
 [% END %]
 
-[% IF object.build_system == "Winxed" %]
+[% IF object.build_system == WINXED %]
 __setup.winxed__
 $include_const "iglobals.pasm";
 $loadlib "io_ops";
@@ -44,11 +44,11 @@ function do_test() {
 }
 [% END %]
 
-[% IF object.build_system == "NQP (Not Quite Perl 6)" %]
+[% IF object.build_system == NQP %]
 
 [% END %]
 
-[% IF object.build_system == "PIR (Parrot Intermediate Representation)" %]
+[% IF object.build_system == PIR %]
 __setup.pir__
 #!/usr/bin/env parrot
 
@@ -645,17 +645,17 @@ inline op [% object.name %]_pmc_addr(out INT, invar PMC) :base_core {
  */
 [% END %]
 
-[% IF object.test_system == "Perl 5" %]
+[% IF object.test_system == PERL5 %]
 __t/00-sanity.t__
 
 [% END %]
 
-[% IF object.test_system == "Rosella (Winxed)" %]
+[% IF object.test_system == ROSELLA_WINXED %]
 __t/00-sanity.t__
 
 [% END %]
 
-[% IF object.test_system == "Rosella (NQP)" %]
+[% IF object.test_system == ROSELLA_NQP %]
 __t/00-sanity.t__
 
 [% END %]

@@ -4,25 +4,25 @@ use v5.12;
 use Moose::Util::TypeConstraints;
 
 use constant {
-    winxed            => 'Winxed',
-    nqp               => 'NQP (Not Quite Perl 6)',
-    pir               => 'PIR (Parrot Intermediate Representation)',
-    perl5             => 'Perl 5',
-    rosella_winxed    => 'Rosella (Winxed)',
-    rosella_nqp       => 'Rosella (NQP)'
+    WINXED            => 'Winxed',
+    NQP               => 'NQP (Not Quite Perl 6)',
+    PIR               => 'PIR (Parrot Intermediate Representation)',
+    PERL5             => 'Perl 5',
+    ROSELLA_WINXED    => 'Rosella (Winxed)',
+    ROSELLA_NQP       => 'Rosella (NQP)'
 };
 
 enum 'Build_Systems', [
-                       winxed,
-                       nqp,
-                       pir,
-                       perl5
+                       WINXED,
+                       NQP,
+                       PIR,
+                       PERL5
                       ];
 
 enum 'Test_Systems', [
-                       rosella_winxed,
-                       rosella_nqp,
-                       perl5
+                       ROSELLA_WINXED,
+                       ROSELLA_NQP,
+                       PERL5
                      ];
 
 no Moose::Util::TypeConstraints;

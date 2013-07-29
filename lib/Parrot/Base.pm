@@ -71,7 +71,13 @@ method generate_template($template_dir,$template) {
     
     my $tt      = Template->new($config);
     my $objects = {
-        object => $self,
+        WINXED              => Parrot::Type::WINXED,
+        NQP                 => Parrot::Type::NQP,
+        PERL5               => Parrot::Type::PERL5,
+        PIR                 => Parrot::Type::PIR,
+        ROSELLA_WINXED      => Parrot::Type::ROSELLA_WINXED,
+        ROSELLA_NQP         => Parrot::Type::ROSELLA_NQP,
+        object              => $self,
     };
 
     my $output;
