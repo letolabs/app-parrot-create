@@ -124,7 +124,7 @@ method generate_project($content_template) {
     }
     
     close($fh) if($fh);
-    return $filepath;
+    return "$tmp_base/$time/";
 }
 
 method generate_archive($path_to_project) {
