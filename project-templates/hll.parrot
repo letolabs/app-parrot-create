@@ -16,11 +16,11 @@ $loadlib "io_ops";
 function main[main](argv) {
     var parrot_[% object.name %] = {
         "name"              : '[% object.name %]',
-        "abstract"          : '',
-        "description"       : '',
+        "abstract"          : 'the [% object.name %] compiler',
+        "description"       : 'the [% object.name %] for Parrot VM.',
         "authority"         : '',
         "copyright_holder"  : '',
-        "keywords"          : [],
+        "keywords"          : ["parrot","[% object.name %]"],
         "license_type"      : '',
         "license_uri"       : '',
         "checkout_uri"      : '',
@@ -34,13 +34,113 @@ function main[main](argv) {
         "manifest_includes" : ["README.md", "setup.winxed"]
     };
   
+    var config = getinterp()[IGLOBALS_CONFIG_HASH];
+    ${ set_global 'config', config };
+
     if (argv[1] == "test")
         do_test();
+
+    load_bytecode('distutils.pir');
+    using setup;
+    using register_step_before;
+
+    register_step_before("build", build_[% object.name %]);
+    register_step_before("clean", clean_build_dir);
+
+    argv.shift();
+    setup(argv, parrot_[% object.name %]);
+}
+
+function build_[% object.name %](var parrot_[% object.name %]) {
+
+  var files = {
+    'Actions':'gen_actions.pir',
+    'Compiler':'gen_compiler.pir',
+    'Grammar':'gen_grammar.pir',
+    'Runtime':"gen_runtime.pir"
+  };
+
+  int result;  
+  string target = '--target=pir';
+  string output = '--output=src/';
+  
+
+  string prefix = "src/[% object.name %]/";
+
+  for (string source in files) {
+    string command = _build_command([
+        "/usr/local/bin/parrot-nqp",
+        target,
+        output + string(files[source]),
+        prefix + source + ".pm"
+    ]);
+    say(command);
+    ${ spawnw result, command };
+  }
+
+  string command = _build_command([
+        "/usr/local/bin/parrot",
+        "-o",
+        "[% object.name %]/[% object.name %].pbc",
+        "src/[% object.name %].pir"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  command = _build_command([
+        "/usr/local/bin/parrot",
+        "-o",
+        "[% object.name %].pbc",
+        "[% object.name %].pir"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  command = _build_command([
+        "/usr/local/bin/pbc_to_exe",
+        "[% object.name %].pbc",
+        "--install"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  command = _build_command([
+        "strip",
+        "installable_[% object.name %]"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+}
+
+function _build_command(var commands) {
+  return string(join(' ', commands));
 }
 
 function do_test() {
     int result;
     ${ exit result };
+}
+
+function clean_build_dir() {
+  _unlink_file("[% object.name %].c");
+  _unlink_file("[% object.name %].o");
+  _unlink_file("[% object.name %].pbc");
+  _unlink_file("[% object.name %]/[% object.name %].pbc");
+  _unlink_file("installable_[% object.name %]");
+  _unlink_file("[% object.name %].o");
+  _unlink_file("src/gen_actions.pir");
+  _unlink_file("src/gen_compiler.pir");
+  _unlink_file("src/gen_grammar.pir");
+  _unlink_file("src/gen_runtime.pir");
+}
+
+function _unlink_file(string file) {
+  int e = 0;
+  ${ stat e, file, 0 };
+  if (e) {
+    say("unlink " + file);
+    unlink(file);
+  }
 }
 [% END %]
 
@@ -108,7 +208,8 @@ No Configure step, no Makefile generated.
         $P0['dynops'] = $P1
     [% END %]
 
-    [% IF object.with_ops %]
+    [% IF object.with_pmc %]
+        # build
         $P2 = new 'Hash'
         $P3 = split ' ', 'src/pmc/[% object.name %].pmc'
         $P2['[% object.name %]_group'] = $P3
@@ -159,6 +260,8 @@ SOURCES
 #   fill-column: 100
 # End:
 # vim: expandtab shiftwidth=4 ft=pir:
+
+[% END %]
 
 __[% object.name %].pir__
 
@@ -258,8 +361,6 @@ object.
 # End:
 # vim: expandtab shiftwidth=4 ft=pir:
 
-
-[% END %]
 
 __PARROT_REVISION__
 Revision
