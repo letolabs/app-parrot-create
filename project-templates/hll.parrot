@@ -1,14 +1,13 @@
-__README__
-Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %].
-
-    $ parrot setup.pir
-    $ parrot setup.pir test
-
 [% IF object.build_system == PERL5 %]
 
 [% END %]
 
 [% IF object.build_system == WINXED %]
+__README__
+Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+    $ winxed setup.winxed
+    $ winxed setup.winxed clean
+
 __setup.winxed__
 $include_const "iglobals.pasm";
 $loadlib "io_ops";
@@ -52,6 +51,46 @@ function main[main](argv) {
 }
 
 function build_[% object.name %](var parrot_[% object.name %]) {
+[% IF object.with_ops %]
+  string command = _build_command([
+        "/usr/local/bin/ops2c",
+        "--dynamic",
+        "src/ops/[% object.name %].ops"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  string ops_c = "src/ops/[% object.name %]_ops.c";
+  string obj  = "src/ops/[% object.name %]_ops.o";
+  command = _build_command([
+    _config('cc'),
+    _config('ccflags'),
+    _config('cc_shared'),
+    _config('embed-cflags'),
+    _config('libparrot_linkflags'),
+    _config('cc_o_out'),
+    obj,
+    "-c",
+    ops_c
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  string shared_obj = "dynext/[% object.name %]_ops.so";
+  command = _build_command([
+    _config('ld'),
+    _config('ld_out'),
+    shared_obj,
+    obj,
+    _config('ldflags'),
+    _config('ld_debug'),
+    _config('rpath_blib'),
+    _config('linkflags'),
+    _config('ld_load_flags')
+  ]);
+  say(command);
+  ${ spawnw result, command };
+[% END %]
 
   var files = {
     'Actions':'gen_actions.pir',
@@ -64,7 +103,6 @@ function build_[% object.name %](var parrot_[% object.name %]) {
   string target = '--target=pir';
   string output = '--output=src/';
   
-
   string prefix = "src/[% object.name %]/";
 
   for (string source in files) {
@@ -78,7 +116,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
     ${ spawnw result, command };
   }
 
-  string command = _build_command([
+  command = _build_command([
         "/usr/local/bin/parrot",
         "-o",
         "[% object.name %]/[% object.name %].pbc",
@@ -122,6 +160,12 @@ function do_test() {
 }
 
 function clean_build_dir() {
+[% IF object.with_ops %]
+  _unlink_file("dynext/[% object.name %]_ops.so");
+  _unlink_file("src/ops/[% object.name %]_ops.c");
+  _unlink_file("src/ops/[% object.name %]_ops.h");
+  _unlink_file("src/ops/[% object.name %]_ops.o");
+[% END %]
   _unlink_file("[% object.name %].c");
   _unlink_file("[% object.name %].o");
   _unlink_file("[% object.name %].pbc");
@@ -142,6 +186,12 @@ function _unlink_file(string file) {
     unlink(file);
   }
 }
+
+function _config(string key) {
+  var config;
+  ${ get_global config, 'config' };
+  return string(config[key]);
+}
 [% END %]
 
 [% IF object.build_system == NQP %]
@@ -149,6 +199,11 @@ function _unlink_file(string file) {
 [% END %]
 
 [% IF object.build_system == PIR %]
+__README__
+Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+    $ parrot setup.pir
+    $ parrot setup.pir test
+
 __setup.pir__
 #!/usr/bin/env parrot
 
@@ -201,20 +256,20 @@ No Configure step, no Makefile generated.
     $P0['abstract'] = 'the [% object.name %] compiler'
     $P0['description'] = 'the [% object.name %] for Parrot VM.'
 
-    [% IF object.with_ops %]
-        # build
-        $P1 = new 'Hash'
-        $P1['[% object.name %]_ops'] = 'src/ops/[% object.name %].ops'
-        $P0['dynops'] = $P1
-    [% END %]
+[% IF object.with_ops %]
+    # build
+    $P1 = new 'Hash'
+    $P1['[% object.name %]_ops'] = 'src/ops/[% object.name %].ops'
+    $P0['dynops'] = $P1
+[% END %]
 
-    [% IF object.with_pmc %]
-        # build
-        $P2 = new 'Hash'
-        $P3 = split ' ', 'src/pmc/[% object.name %].pmc'
-        $P2['[% object.name %]_group'] = $P3
-        $P0['dynpmc'] = $P2
-    [% END %]
+[% IF object.with_pmc %]
+    # build
+    $P2 = new 'Hash'
+    $P3 = split ' ', 'src/pmc/[% object.name %].pmc'
+    $P2['[% object.name %]_group'] = $P3
+    $P0['dynpmc'] = $P2
+[% END %]
 
     $P4 = new 'Hash'
     $P4['src/gen_actions.pir'] = 'src/[% object.name %]/Actions.pm'
