@@ -51,8 +51,9 @@ function main[main](argv) {
 }
 
 function build_[% object.name %](var parrot_[% object.name %]) {
+  string command;
 [% IF object.with_ops %]
-  string command = _build_command([
+  command = _build_command([
         "/usr/local/bin/ops2c",
         "--dynamic",
         "src/ops/[% object.name %].ops"
@@ -61,7 +62,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
   ${ spawnw result, command };
 
   string ops_c = "src/ops/[% object.name %]_ops.c";
-  string obj  = "src/ops/[% object.name %]_ops.o";
+  string obj_ops  = "src/ops/[% object.name %]_ops.o";
   command = _build_command([
     _config('cc'),
     _config('ccflags'),
@@ -69,25 +70,145 @@ function build_[% object.name %](var parrot_[% object.name %]) {
     _config('embed-cflags'),
     _config('libparrot_linkflags'),
     _config('cc_o_out'),
-    obj,
+    obj_ops,
     "-c",
     ops_c
   ]);
   say(command);
   ${ spawnw result, command };
 
-  string shared_obj = "dynext/[% object.name %]_ops.so";
+  string shared_obj_ops = "dynext/[% object.name %]_ops.so";
   command = _build_command([
     _config('ld'),
     _config('ld_out'),
-    shared_obj,
-    obj,
+    shared_obj_ops,
+    obj_ops,
     _config('ldflags'),
     _config('ld_debug'),
     _config('rpath_blib'),
     _config('linkflags'),
     _config('ld_load_flags')
   ]);
+  say(command);
+  ${ spawnw result, command };
+[% END %]
+
+[% IF object.with_pmc %]
+  var s = new 'FileHandle';
+
+  command = "locate pmc2c.pl -n1 > .pmc ";
+  ${ spawnw result, command };
+  s.open(".pmc"); 
+  string pmc2c = chomp(s.readline());
+  s.close();
+
+  command = "locate */src/parrot/* -n1 > .pmc";
+  ${ spawnw result, command };
+  s.open(".pmc");
+  string parrot_src = chomp(s.readline());
+  s.close();
+
+  command = "locate */src/parrot/*/pmc -n1 > .pmc";
+  ${ spawnw result, command };
+  s.open(".pmc");
+  string parrot_pmc = chomp(s.readline());
+  s.close();
+
+  command = "locate */include/parrot/*/pmc -n1 > .pmc";
+  ${ spawnw result, command };
+  s.open(".pmc");
+  string pmc_include = chomp(s.readline());
+  s.close();
+
+  string cur_pmc = "src/pmc/";
+
+  command = _build_command([
+    "perl",
+    pmc2c,
+    "--dump",
+    "--include " + parrot_src,
+    "--include " + parrot_pmc,
+    "--include " + cur_pmc,
+    cur_pmc + "[% object.name %].pmc"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  command = _build_command([
+    "perl",
+    pmc2c,
+    "--c",
+    "--include " + parrot_src,
+    "--include " + parrot_pmc,
+    "--include " + cur_pmc,
+    cur_pmc + "[% object.name %].pmc"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  string pmc_c = "src/pmc/[% object.name %].c";
+  string obj_pmc  = "src/pmc/[% object.name %].o";
+  command = _build_command([
+    _config('cc'),
+    _config('ccflags'),
+    _config('cc_shared'),
+    _config('embed-cflags'),
+    "-I"+pmc_include,
+    _config('libparrot_linkflags'),
+    _config('cc_o_out'),
+    obj_pmc,
+    "-c",
+    pmc_c
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  pmc_c = "src/pmc/[% object.name %]_group.c";
+  obj_pmc  = "src/pmc/[% object.name %]_group.o";
+
+  command = _build_command([
+    "perl",
+    pmc2c,
+    "--library",
+    cur_pmc + "[% object.name %]_group",
+    "--c",
+    cur_pmc + "[% object.name %].pmc"
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  command = _build_command([
+    _config('cc'),
+    _config('ccflags'),
+    _config('cc_shared'),
+    _config('embed-cflags'),
+    "-I"+pmc_include,
+    _config('libparrot_linkflags'),
+    _config('cc_o_out'),
+    obj_pmc,
+    "-c",
+    pmc_c
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  string shared_obj_pmc = "dynext/[% object.name %]_group.so";
+  command = _build_command([
+    _config('ld'),
+    _config('ld_out'),
+    shared_obj_pmc,
+    obj_pmc,
+    cur_pmc + "[% object.name %].o",
+    _config('ldflags'),
+    _config('ld_debug'),
+    _config('rpath_blib'),
+    _config('linkflags'),
+    _config('ld_load_flags')
+  ]);
+  say(command);
+  ${ spawnw result, command };
+
+  command = "strip " + shared_obj_pmc;
   say(command);
   ${ spawnw result, command };
 [% END %]
