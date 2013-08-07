@@ -54,7 +54,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
   string command;
 [% IF object.with_ops %]
   command = _build_command([
-        "/usr/local/bin/ops2c",
+        "ops2c",
         "--dynamic",
         "src/ops/[% object.name %].ops"
   ]);
@@ -66,8 +66,10 @@ function build_[% object.name %](var parrot_[% object.name %]) {
   command = _build_command([
     _config('cc'),
     _config('ccflags'),
+    _config('cc_debug'),
     _config('cc_shared'),
     _config('embed-cflags'),
+    _config('ccwarn'),
     _config('libparrot_linkflags'),
     _config('cc_o_out'),
     obj_ops,
@@ -94,31 +96,10 @@ function build_[% object.name %](var parrot_[% object.name %]) {
 [% END %]
 
 [% IF object.with_pmc %]
-  var s = new 'FileHandle';
-
-  command = "locate pmc2c.pl -n1 > .pmc ";
-  ${ spawnw result, command };
-  s.open(".pmc"); 
-  string pmc2c = chomp(s.readline());
-  s.close();
-
-  command = "locate */src/parrot/* -n1 > .pmc";
-  ${ spawnw result, command };
-  s.open(".pmc");
-  string parrot_src = chomp(s.readline());
-  s.close();
-
-  command = "locate */src/parrot/*/pmc -n1 > .pmc";
-  ${ spawnw result, command };
-  s.open(".pmc");
-  string parrot_pmc = chomp(s.readline());
-  s.close();
-
-  command = "locate */include/parrot/*/pmc -n1 > .pmc";
-  ${ spawnw result, command };
-  s.open(".pmc");
-  string pmc_include = chomp(s.readline());
-  s.close();
+  string pmc2c          = string(_config('libdir')) + string(_config('versiondir')) + "/tools/build/pmc2c.pl";
+  string parrot_src     = string(_config('srcdir')) + string(_config('versiondir'));
+  string parrot_pmc     = string(_config('srcdir')) + string(_config('versiondir')) + "/pmc";
+  string pmc_include    = string(_config('embed-cflags')) + "/pmc";
 
   string cur_pmc = "src/pmc/";
 
@@ -153,7 +134,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
     _config('ccflags'),
     _config('cc_shared'),
     _config('embed-cflags'),
-    "-I"+pmc_include,
+    pmc_include,
     _config('libparrot_linkflags'),
     _config('cc_o_out'),
     obj_pmc,
@@ -228,7 +209,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
 
   for (string source in files) {
     string command = _build_command([
-        "/usr/local/bin/parrot-nqp",
+        "parrot-nqp",
         target,
         output + string(files[source]),
         prefix + source + ".pm"
@@ -238,7 +219,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
   }
 
   command = _build_command([
-        "/usr/local/bin/parrot",
+        "parrot",
         "-o",
         "[% object.name %]/[% object.name %].pbc",
         "src/[% object.name %].pir"
@@ -247,7 +228,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
   ${ spawnw result, command };
 
   command = _build_command([
-        "/usr/local/bin/parrot",
+        "parrot",
         "-o",
         "[% object.name %].pbc",
         "[% object.name %].pir"
@@ -256,7 +237,7 @@ function build_[% object.name %](var parrot_[% object.name %]) {
   ${ spawnw result, command };
 
   command = _build_command([
-        "/usr/local/bin/pbc_to_exe",
+        "pbc_to_exe",
         "[% object.name %].pbc",
         "--install"
   ]);
