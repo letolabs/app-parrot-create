@@ -297,6 +297,99 @@ function _config(string key) {
 [% END %]
 
 [% IF object.build_system == NQP %]
+__README__
+Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+    $ parrot-nqp setup.nqp
+    $ parrot-nqp setup.nqp test
+    # parrot-nqp setup.nqp install
+    
+__setup.nqp__
+#!/usr/bin/env parrot-nqp
+
+sub MAIN() {
+    # Load distutils library
+    pir::load_bytecode('distutils.pbc');
+
+    # ALL DISTUTILS CONFIGURATION IN THIS HASH
+    my %config := hash(
+        # General
+        setup            => 'setup.nqp',
+        name             => '[% object.name %]',
+        abstract         => 'the [% object.name %] compiler',
+        authority        => '',
+        copyright_holder => '',
+        description      => 'the [% object.name %] for Parrot VM.',
+        keywords         => < parrot [% object.name %] >,
+        license_type     => '',
+        license_uri      => '',
+        checkout_uri     => '',
+        browser_uri      => '',
+        project_uri      => '',
+
+        # Build
+        # XXX: Doesn't actually work; need distutils to make any
+        #      missing directories before performing compiles
+[% IF object.with_ops %]
+        dynops			 => unflatten(
+        	'[% object.name %]_ops'						,'src/ops/[% object.name %].ops'
+        ),
+[% END %]
+[% IF object.with_pmc %]
+        dynpmc			 => unflatten(
+        	'[% object.name %]_group'					,'src/pmc/[% object.name %].pmc'
+        ),
+[% END %]
+        pir_nqprx        => unflatten(
+            'src/gen_actions.pir'			, 'src/[% object.name %]/Actions.pm',
+            'src/gen_compiler.pir'    		, 'src/[% object.name %]/Compiler.pm',
+            'src/gen_grammar.pir'     		, 'src/[% object.name %]/Grammar.pm',
+            'src/gen_runtime.pir'     		, 'src/[% object.name %]/Runtime.pm'
+        ),
+        pbc_pir          => unflatten(
+            '[% object.name %]/[% object.name %].pbc', 'src/[% object.name %].pir',
+            '[% object.name %].pbc'         , '[% object.name %].pir'
+        ),
+        exe_pbc          => unflatten(
+            'installable_[% object.name %]' , '[% object.name %].pbc'
+        ),
+        installable_pbc  => unflatten(
+            'parrot-[% object.name %]'      , '[% object.name %].pbc'
+        ),
+
+        # Test
+        prove_exec       => get_nqp(),
+
+        # Dist/Install
+        inst_lang         => <
+                              [% object.name %]/[% object.name %].pbc
+                              installable_[% object.name %]
+                            >,
+        inst_data        => glob('metadata/*.json'),
+        doc_files        => glob('README doc/*/*.pod'),
+    );
+
+
+    # Boilerplate; should not need to be changed
+    my @*ARGS := pir::getinterp__P()[2];
+       @*ARGS.shift;
+
+    setup(@*ARGS, %config);
+}
+
+# Work around minor nqp-rx limitations
+sub hash     (*%h ) { %h }
+sub unflatten(*@kv) { my %h; for @kv -> $k, $v { %h{$k} := $v }; %h }
+
+# Start it up!
+MAIN();
+
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 100
+# End:
+# vim: expandtab shiftwidth=4:
 
 [% END %]
 
@@ -305,6 +398,7 @@ __README__
 Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
     $ parrot setup.pir
     $ parrot setup.pir test
+    # parrot setup.pir install
 
 __setup.pir__
 #!/usr/bin/env parrot
