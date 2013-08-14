@@ -7,6 +7,7 @@ __README__
 Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
     $ winxed setup.winxed
     $ winxed setup.winxed clean
+    # winxed setup.winxed install
 
 __setup.winxed__
 $include_const "iglobals.pasm";
@@ -25,274 +26,40 @@ function main[main](argv) {
         "checkout_uri"      : '',
         "browser_uri"       : '',
         "project_uri"       : '',
-        "pir_winxed"        : {},
-        "pbc_pir"           : {},
-        "inst_lib"          : [],
-        "installable_pbc"   : {},
-        "include_winxed"    : {},
-        "manifest_includes" : ["README.md", "setup.winxed"]
+[% IF object.with_ops %]
+        "dynops"            : {
+            '[% object.name %]_ops'     :'src/ops/[% object.name %].ops'
+        },
+[% END %]
+[% IF object.with_pmc %]
+        "dynpmc"            : {
+            '[% object.name %]_group'   :'src/pmc/[% object.name %].pmc'
+        },
+[% END %]
+        "pir_nqprx"         : {
+            'src/gen_actions.pir'   : 'src/[% object.name %]/Actions.pm',
+            'src/gen_compiler.pir'  : 'src/[% object.name %]/Compiler.pm',
+            'src/gen_grammar.pir'   : 'src/[% object.name %]/Grammar.pm',
+            'src/gen_runtime.pir'   : 'src/[% object.name %]/Runtime.pm'},
+        "pbc_pir"           : {
+            '[% object.name %]/[% object.name %].pbc' : 'src/[% object.name %].pir',
+            '[% object.name %].pbc'       : '[% object.name %].pir'
+        },
+        "exe_pbc"           :{
+            'installable_[% object.name %]' : '[% object.name %].pbc'
+        },
+        "installable_pbc"   : {
+            'parrot-[% object.name %]'  : '[% object.name %].pbc'
+        },
+        "inst_lang"         : [ '[% object.name %].pbc', 'installable_[% object.name %]' ],
+        "manifest_includes" : ["README", "setup.winxed"]
     };
-  
-    var config = getinterp()[IGLOBALS_CONFIG_HASH];
-    ${ set_global 'config', config };
-
-    if (argv[1] == "test")
-        do_test();
 
     load_bytecode('distutils.pir');
     using setup;
-    using register_step_before;
-
-    register_step_before("build", build_[% object.name %]);
-    register_step_before("clean", clean_build_dir);
 
     argv.shift();
     setup(argv, parrot_[% object.name %]);
-}
-
-function build_[% object.name %](var parrot_[% object.name %]) {
-  string command;
-[% IF object.with_ops %]
-  command = _build_command([
-        "ops2c",
-        "--dynamic",
-        "src/ops/[% object.name %].ops"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  string ops_c = "src/ops/[% object.name %]_ops.c";
-  string obj_ops  = "src/ops/[% object.name %]_ops.o";
-  command = _build_command([
-    _config('cc'),
-    _config('ccflags'),
-    _config('cc_debug'),
-    _config('cc_shared'),
-    _config('embed-cflags'),
-    _config('ccwarn'),
-    _config('libparrot_linkflags'),
-    _config('cc_o_out'),
-    obj_ops,
-    "-c",
-    ops_c
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  string shared_obj_ops = "dynext/[% object.name %]_ops.so";
-  command = _build_command([
-    _config('ld'),
-    _config('ld_out'),
-    shared_obj_ops,
-    obj_ops,
-    _config('ldflags'),
-    _config('ld_debug'),
-    _config('rpath_blib'),
-    _config('linkflags'),
-    _config('ld_load_flags')
-  ]);
-  say(command);
-  ${ spawnw result, command };
-[% END %]
-
-[% IF object.with_pmc %]
-  string pmc2c          = string(_config('libdir')) + string(_config('versiondir')) + "/tools/build/pmc2c.pl";
-  string parrot_src     = string(_config('srcdir')) + string(_config('versiondir'));
-  string parrot_pmc     = string(_config('srcdir')) + string(_config('versiondir')) + "/pmc";
-  string pmc_include    = string(_config('embed-cflags')) + "/pmc";
-
-  string cur_pmc = "src/pmc/";
-
-  command = _build_command([
-    "perl",
-    pmc2c,
-    "--dump",
-    "--include " + parrot_src,
-    "--include " + parrot_pmc,
-    "--include " + cur_pmc,
-    cur_pmc + "[% object.name %].pmc"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  command = _build_command([
-    "perl",
-    pmc2c,
-    "--c",
-    "--include " + parrot_src,
-    "--include " + parrot_pmc,
-    "--include " + cur_pmc,
-    cur_pmc + "[% object.name %].pmc"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  string pmc_c = "src/pmc/[% object.name %].c";
-  string obj_pmc  = "src/pmc/[% object.name %].o";
-  command = _build_command([
-    _config('cc'),
-    _config('ccflags'),
-    _config('cc_shared'),
-    _config('embed-cflags'),
-    pmc_include,
-    _config('libparrot_linkflags'),
-    _config('cc_o_out'),
-    obj_pmc,
-    "-c",
-    pmc_c
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  pmc_c = "src/pmc/[% object.name %]_group.c";
-  obj_pmc  = "src/pmc/[% object.name %]_group.o";
-
-  command = _build_command([
-    "perl",
-    pmc2c,
-    "--library",
-    cur_pmc + "[% object.name %]_group",
-    "--c",
-    cur_pmc + "[% object.name %].pmc"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  command = _build_command([
-    _config('cc'),
-    _config('ccflags'),
-    _config('cc_shared'),
-    _config('embed-cflags'),
-    "-I"+pmc_include,
-    _config('libparrot_linkflags'),
-    _config('cc_o_out'),
-    obj_pmc,
-    "-c",
-    pmc_c
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  string shared_obj_pmc = "dynext/[% object.name %]_group.so";
-  command = _build_command([
-    _config('ld'),
-    _config('ld_out'),
-    shared_obj_pmc,
-    obj_pmc,
-    cur_pmc + "[% object.name %].o",
-    _config('ldflags'),
-    _config('ld_debug'),
-    _config('rpath_blib'),
-    _config('linkflags'),
-    _config('ld_load_flags')
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  command = "strip " + shared_obj_pmc;
-  say(command);
-  ${ spawnw result, command };
-[% END %]
-
-  var files = {
-    'Actions':'gen_actions.pir',
-    'Compiler':'gen_compiler.pir',
-    'Grammar':'gen_grammar.pir',
-    'Runtime':"gen_runtime.pir"
-  };
-
-  int result;  
-  string target = '--target=pir';
-  string output = '--output=src/';
-  
-  string prefix = "src/[% object.name %]/";
-
-  for (string source in files) {
-    string command = _build_command([
-        "parrot-nqp",
-        target,
-        output + string(files[source]),
-        prefix + source + ".pm"
-    ]);
-    say(command);
-    ${ spawnw result, command };
-  }
-
-  command = _build_command([
-        "parrot",
-        "-o",
-        "[% object.name %]/[% object.name %].pbc",
-        "src/[% object.name %].pir"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  command = _build_command([
-        "parrot",
-        "-o",
-        "[% object.name %].pbc",
-        "[% object.name %].pir"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  command = _build_command([
-        "pbc_to_exe",
-        "[% object.name %].pbc",
-        "--install"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-
-  command = _build_command([
-        "strip",
-        "installable_[% object.name %]"
-  ]);
-  say(command);
-  ${ spawnw result, command };
-}
-
-function _build_command(var commands) {
-  return string(join(' ', commands));
-}
-
-function do_test() {
-    int result;
-    ${ exit result };
-}
-
-function clean_build_dir() {
-[% IF object.with_ops %]
-  _unlink_file("dynext/[% object.name %]_ops.so");
-  _unlink_file("src/ops/[% object.name %]_ops.c");
-  _unlink_file("src/ops/[% object.name %]_ops.h");
-  _unlink_file("src/ops/[% object.name %]_ops.o");
-[% END %]
-  _unlink_file("[% object.name %].c");
-  _unlink_file("[% object.name %].o");
-  _unlink_file("[% object.name %].pbc");
-  _unlink_file("[% object.name %]/[% object.name %].pbc");
-  _unlink_file("installable_[% object.name %]");
-  _unlink_file("[% object.name %].o");
-  _unlink_file("src/gen_actions.pir");
-  _unlink_file("src/gen_compiler.pir");
-  _unlink_file("src/gen_grammar.pir");
-  _unlink_file("src/gen_runtime.pir");
-}
-
-function _unlink_file(string file) {
-  int e = 0;
-  ${ stat e, file, 0 };
-  if (e) {
-    say("unlink " + file);
-    unlink(file);
-  }
-}
-
-function _config(string key) {
-  var config;
-  ${ get_global config, 'config' };
-  return string(config[key]);
 }
 [% END %]
 
