@@ -7,7 +7,7 @@ use Template;
 use Method::Signatures;
 use File::Spec;
 use File::Path;
-use File::Temp qw/tempfile tempdir/;
+use File::Temp;
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 
 requires 'init';
@@ -91,10 +91,9 @@ method generate_project($content_template) {
     my @lines_template = split(/\n/, $content_template);
     
     my $time     = time;
-    my $tmp_base = tempdir( "app-parrot-create-XXXXXXX", TMPDIR => 1,
-        # CLEANUP => 1
-    );
-    my $filepath      = "$tmp_base/$time/".$self->name;
+    my $tmp_base = File::Temp->newdir("app-parrot-create-XXXXXXX");
+
+    my $filepath = "$tmp_base/$time/".$self->name;
     my $fh;
     
     while (@lines_template) {
@@ -124,7 +123,11 @@ method generate_project($content_template) {
     }
     
     close($fh) if($fh);
-    return "$tmp_base/$time/";
+    
+    my $project_path    = "$tmp_base/$time/";
+    my $archive_path    = $self->generate_archive($project_path);
+    
+    return $archive_path;
 }
 
 method generate_archive($path_to_project) {
@@ -143,8 +146,7 @@ method generate_archive($path_to_project) {
 
 method generate() {
     my $content_template = $self->generate_template($self->get_template());
-    my $project_path     = $self->generate_project($content_template);
-    my $archive_path     = $self->generate_archive($project_path); 
+    my $archive_path     = $self->generate_project($content_template); 
     return $archive_path;
 }
 
