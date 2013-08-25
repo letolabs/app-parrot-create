@@ -4,8 +4,6 @@ use Mojo::Home;
 use Parrot::HLL;
 use Parrot::Library;
 
-# Documentation browser under "/perldoc"
-plugin 'PODRenderer';
 # Read configuration file
 plugin 'yaml_config';
 # Send file to the client
@@ -47,6 +45,8 @@ post '/' => sub {
         'filepath'   => $archive_path,
         'format'     => 'zip' 
     );
+    
+    say "File have transfered";
 } => 'index';
 
 app->start;
