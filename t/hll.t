@@ -10,7 +10,7 @@ use Parrot::HLL;
 ok(my $hll = Parrot::HLL->new(),"Create HLL object");
 
 my ($name, $builder, $harness, $with_pmc, $with_ops, $with_doc) =
-                            ('xyz','PIR (Parrot Intermediate Representation)','Perl 5',1,1,0);
+                            ('xyz',Parrot::Type::WINXED,'Perl 5',1,1,0);
 
 ok($hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc),"HLL Initialization");
 ok($hll->template("project-templates/hll.parrot"),"Set template");

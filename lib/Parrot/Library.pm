@@ -2,7 +2,6 @@ package Parrot::Library;
 
 use v5.12;
 use Moose;
-use Try::Tiny;
 use Method::Signatures;
 
 with 'Parrot::Base';

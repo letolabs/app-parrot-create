@@ -45,8 +45,6 @@ post '/' => sub {
         'filepath'   => $archive_path,
         'format'     => 'zip' 
     );
-    
-    say "File have transfered";
 } => 'index';
 
 app->start;
