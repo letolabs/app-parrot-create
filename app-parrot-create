@@ -22,8 +22,7 @@ post '/' => sub {
                             = map { $self->param($_) } qw/hll_name hll_builder hll_test with_pmc with_ops with_doc/;
                             
         my $hll = Parrot::HLL->new();
-        $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc);
-        $hll->template($self->app->config->{hll_template});
+        $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc, $self->app->config->{hll_template});
         
         if ($archive_path = $hll->generate()) {
             $self->app->log->debug("The HLL created!");
@@ -33,8 +32,7 @@ post '/' => sub {
         ($name, $builder, $harness) = map { $self->param($_) } qw/lib_name lib_builder lib_test/;
 
         my $library = Parrot::Library->new();
-        $library->init($name, $builder, $harness);
-        $library->template($self->app->config->{library_template});
+        $library->init($name, $builder, $harness, $self->app->config->{hll_template});
         
         if ($archive_path = $library->generate()) {
             $self->app->log->debug("The Library created!");

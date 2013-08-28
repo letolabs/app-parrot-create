@@ -6,10 +6,11 @@ use Method::Signatures;
 
 with 'Parrot::Base';
 
-method init($name, $build_system, $test_system) {
+method init($name, $build_system, $test_system, $template) {
     $self->name($name);
     $self->build_system($build_system);
     $self->test_system($test_system);
+    $self->template($template);
     
     return 1;
 }
@@ -30,10 +31,9 @@ __END__
 
     #simple using
     my $lib = Parrot::Library->new();
-    $lib->init($name, $builder, $harness);
-    $lib->template($hll_template);
+    $lib->init($name, $builder, $harness, $template);
     
-    #and return archive
+    #generate and return archive
     $archive_path = $lib->generate();
 
 =head1 METHODS
@@ -47,7 +47,8 @@ __END__
 =head4 Args:
     $name,
     $build_system,
-    $test_system;
+    $test_system,
+    $template;
 =cut
 
 =head4 Retuns:

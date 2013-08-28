@@ -31,13 +31,14 @@ has 'with_doc' => (
     default     => '0'
 );
 
-method init($name, $build_system, $test_system, $with_pmc, $with_ops, $with_doc) {
+method init($name, $build_system, $test_system, $with_pmc, $with_ops, $with_doc, $template) {
     $self->name($name);
     $self->build_system($build_system);
     $self->test_system($test_system);
     $self->with_pmc($with_pmc);
     $self->with_ops($with_ops);
     $self->with_doc($with_doc);
+    $self->template($template);
 
     return 1;
 }
@@ -57,10 +58,9 @@ __END__
 
     #simple using
     my $hll = Parrot::HLL->new();
-    $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc);
-    $hll->template($hll_template);
+    $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc, $template);
     
-    #and return archive
+    #generate and return archive
     $archive_path = $hll->generate();
 
 =head1 REQUIRED FIELDS
@@ -112,7 +112,8 @@ __END__
     $test_system,
     $with_pmc,
     $with_ops,
-    $with_doc;
+    $with_doc,
+    $template;
 =cut
 
 =head4 Retuns:
