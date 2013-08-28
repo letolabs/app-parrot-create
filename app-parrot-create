@@ -32,7 +32,7 @@ post '/' => sub {
         ($name, $builder, $harness) = map { $self->param($_) } qw/lib_name lib_builder lib_test/;
 
         my $library = Parrot::Library->new();
-        $library->init($name, $builder, $harness, $self->app->config->{hll_template});
+        $library->init($name, $builder, $harness, $self->app->config->{library_template});
         
         if ($archive_path = $library->generate()) {
             $self->app->log->debug("The Library created!");
