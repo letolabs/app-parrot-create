@@ -1,6 +1,6 @@
 package Parrot::Type;
 
-use v5.12;
+use v5.10;
 use Moose::Util::TypeConstraints;
 
 use constant {

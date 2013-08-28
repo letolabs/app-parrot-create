@@ -1,6 +1,6 @@
 package Parrot::Library;
 
-use v5.12;
+use v5.10;
 use Moose;
 use Method::Signatures;
 

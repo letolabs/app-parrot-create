@@ -1,7 +1,6 @@
 use Test::More;
 use Test::Mojo;
 
-use v5.12;
 use FindBin;
 require "$FindBin::Bin/../app-parrot-create";
 use lib "$FindBin::Bin/../lib";    # install location

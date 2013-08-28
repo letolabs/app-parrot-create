@@ -1,6 +1,6 @@
 package Parrot::Base;
 
-use v5.12;
+use v5.10;
 use Moose::Role;
 use Parrot::Type;
 use Template;

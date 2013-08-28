@@ -1,6 +1,6 @@
 package Parrot::HLL;
 
-use v5.12;
+use v5.10;
 use Moose;
 use Parrot::Type;
 use Method::Signatures;
