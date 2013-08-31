@@ -33,11 +33,21 @@ function main[main](argv) {
         "manifest_includes" : ["README", "setup.winxed"]
     };
 
+    if (argv[1] == "test")
+    	do_test();
+
     load_bytecode('distutils.pir');
     using setup;
 
     argv.shift();
     setup(argv, parrot_[% object.name %]);
+}
+
+function do_test() {
+  int result;
+  string cmd = "parrot-nqp t/harness";
+  ${ spawnw result, cmd };
+  ${ exit result };
 }
 [% END %]
 
@@ -211,7 +221,7 @@ __src/[% object.name %].pir__
 
 =head1 NAME
 
-Math/rand.pir - the ANSI C rand pseudorandom number generator
+[% object.name %]/[% object.name %].pir - the ANSI C rand pseudorandom number generator
 
 =head1 DESCRIPTION
 
@@ -242,22 +252,22 @@ Portage of the following C implementation, given as example by ISO/IEC 9899:1999
 
 =head1 USAGE
 
-    load_bytecode 'Math/Rand.pbc'
+    load_bytecode '[% object.name %]/[% object.name %].pbc'
     .local pmc rand
-    rand = get_global [ 'Math'; 'Rand' ], 'rand'
+    rand = get_global [ '[% object.name %]'; '[% object.name %]' ], 'rand'
     .local pmc srand
-    srand = get_global [ 'Math'; 'Rand' ], 'srand'
+    srand = get_global [ '[% object.name %]'; '[% object.name %]' ], 'srand'
     .local int seed
     srand(seed)
     $I0 = rand()
     .local pmc rand_max
-    rand_max = get_global [ 'Math'; 'Rand' ], 'RAND_MAX'
+    rand_max = get_global [ '[% object.name %]'; '[% object.name %]' ], 'RAND_MAX'
     .local int RAND_MAX
     RAND_MAX = rand_max()
 
 =cut
 
-.namespace [ 'Math'; 'Rand' ]
+.namespace [ '[% object.name %]'; '[% object.name %]' ]
 
 .sub '__onload' :anon :load
     $P0 = box 1
@@ -317,7 +327,47 @@ __t/00-sanity.t__
 [% END %]
 
 [% IF object.test_system == ROSELLA_WINXED %]
-__t/00-sanity.t__
+__t/harness__
+#! parrot-nqp
+INIT {
+	my $rosella := pir::load_bytecode__ps('rosella/core.pbc');
+	Rosella::initialize_rosella("harness");
+}
+
+my $harness := Rosella::construct(Rosella::Harness);
+
+$harness.add_test_dirs("Winxed", "t/winxed", :recurse(1)).setup_test_run;
+
+$harness.run();
+$harness.show_results;
+
+__t/winxed/00-sanity.t__
+$load "rosella/test.pbc";
+$load "[% object.name %]/[% object.name %].pbc";
+
+class Test_Winxed_Tests {
+    function test_rand() {
+        using [% object.name %].[% object.name %].rand;
+        int rnd = rand();
+        self.assert.defined(rnd);
+    }
+
+    function test_srand() {
+        using [% object.name %].[% object.name %].srand;
+        int seed;
+        srand(seed);
+    }
+
+    function test_rand_max() {
+        using [% object.name %].[% object.name %].RAND_MAX;
+        self.assert.equal(RAND_MAX(),32767);
+    }
+}
+
+function main[main]() {
+    using Rosella.Test.test;
+    test(class Test_Winxed_Tests);
+}
 
 [% END %]
 
