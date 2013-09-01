@@ -3,12 +3,6 @@
 [% END %]
 
 [% IF object.build_system == WINXED %]
-__README__
-Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
-    $ winxed setup.winxed
-    $ winxed setup.winxed clean
-    # winxed setup.winxed install
-
 __setup.winxed__
 $include_const "iglobals.pasm";
 $loadlib "io_ops";
@@ -52,12 +46,6 @@ function do_test() {
 [% END %]
 
 [% IF object.build_system == NQP %]
-__README__
-Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
-    $ parrot-nqp setup.nqp
-    $ parrot-nqp setup.nqp test
-    # parrot-nqp setup.nqp install
-    
 __setup.nqp__
 #!/usr/bin/env parrot-nqp
 
@@ -103,6 +91,11 @@ sub MAIN() {
     # Boilerplate; should not need to be changed
     my @*ARGS := pir::getinterp__P()[2];
        @*ARGS.shift;
+       
+    if @*ARGS[0] eq "test" {
+        do_test();
+        pir::exit__vI(0);
+    }
 
     setup(@*ARGS, %config);
 }
@@ -110,6 +103,11 @@ sub MAIN() {
 # Work around minor nqp-rx limitations
 sub hash     (*%h ) { %h }
 sub unflatten(*@kv) { my %h; for @kv -> $k, $v { %h{$k} := $v }; %h }
+sub do_test() {
+    my $nqp := get_nqp();
+    my $result := pir::spawnw__IS($nqp ~ " t/harness");
+    pir::exit(+$result);
+}
 
 # Start it up!
 MAIN();
@@ -125,12 +123,6 @@ MAIN();
 [% END %]
 
 [% IF object.build_system == PIR %]
-__README__
-Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
-    $ parrot setup.pir
-    $ parrot setup.pir test
-    # parrot setup.pir install
-
 __setup.pir__
 #!/usr/bin/env parrot
 
@@ -150,61 +142,61 @@ No Configure step, no Makefile generated.
 
 =cut
 
+.loadlib "io_ops"
+# end libs
+.namespace [ ]
+
 .sub 'main' :main
-    .param pmc args
-    $S0 = shift args
-    load_bytecode 'distutils.pbc'
+        .param pmc __ARG_1
+.const 'Sub' WSubId_1 = "WSubId_1"
+    root_new $P1, ['parrot';'Hash']
+    $P1["name"] = '[% object.name %]'
+    $P1["abstract"] = 'the [% object.name %] library'
+    $P1["description"] = 'the [% object.name %] for Parrot VM.'
+    $P1["authority"] = ''
+    $P1["copyright_holder"] = ''
+    root_new $P3, ['parrot';'ResizablePMCArray']
+    assign $P3, 2
+    $P3[0] = "parrot"
+    $P3[1] = "[% object.name %]"
+    $P1["keywords"] = $P3
+    $P1["license_type"] = ''
+    $P1["license_uri"] = ''
+    $P1["checkout_uri"] = ''
+    $P1["browser_uri"] = ''
+    $P1["project_uri"] = ''
+    root_new $P4, ['parrot';'Hash']
+    $P4['[% object.name %]/[% object.name %].pbc'] = 'src/[% object.name %].pir'
+    $P1["pbc_pir"] = $P4
+    root_new $P5, ['parrot';'ResizablePMCArray']
+    assign $P5, 1
+    $P5[0] = '[% object.name %]/[% object.name %].pbc'
+    $P1["inst_lib"] = $P5
+    root_new $P6, ['parrot';'ResizablePMCArray']
+    assign $P6, 2
+    $P6[0] = "README"
+    $P6[1] = "setup.pir"
+    $P1["manifest_includes"] = $P6
+    $P3 = __ARG_1[1]
+    set $S1, $P3
+    ne $S1, "test", __label_1
+    WSubId_1()
+  __label_1: # endif
+    load_bytecode 'distutils.pir'
+    get_hll_global $P2, 'setup'
+    __ARG_1.'shift'()
+    $P2(__ARG_1, $P1)
 
-    .local int reqsvn
-    $P0 = new 'FileHandle'
-    $P0.'open'('PARROT_REVISION', 'r')
-    $S0 = $P0.'readline'()
-    reqsvn = $S0
-    $P0.'close'()
+.end # main
 
-    .local pmc config
-    config = get_config()
-    $I0 = config['revision']
-    unless $I0 goto L1
-    unless reqsvn > $I0 goto L1
-    $S1 = "Parrot revision r"
-    $S0 = reqsvn
-    $S1 .= $S0
-    $S1 .= " required (currently r"
-    $S0 = $I0
-    $S1 .= $S0
-    $S1 .= ")\n"
-    print $S1
-    end
-  L1:
 
-    $P0 = new 'Hash'
-    $P0['name'] = '[% object.name %]'
-    $P0['abstract'] = 'the [% object.name %] library'
-    $P0['description'] = 'the [% object.name %] for Parrot VM.'
+.sub 'do_test' :subid('WSubId_1')
+    null $I1
+    set $S1, "parrot-nqp t/harness"
+    spawnw $I1, $S1
+    exit $I1
 
-    $P5 = new 'Hash'
-    $P6 = split "\n", <<'SOURCES'
-src/pir.pir
-SOURCES
-
-    $S0 = pop $P6
-    $P5['[% object.name %]/[% object.name %].pbc'] = $P6
-    $P0['pbc_pir'] = $P5
-
-    # test
-    $S0 = get_parrot()
-    $S0 .= ' [% object.name %].pbc'
-    $P0['prove_exec'] = $S0
-
-    # install
-    $P0['inst_lib'] = '[% object.name %]/[% object.name %].pbc'
-
-    # dist
-    $P0['doc_files'] = 'README'
-
-    .tailcall setup(args :flat, $P0 :flat :named)
-.end
+.end # do_test
 
 
 # Local Variables:
@@ -327,6 +319,17 @@ __t/00-sanity.t__
 [% END %]
 
 [% IF object.test_system == ROSELLA_WINXED %]
+__README__
+Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+You need to add path to rosella library on you project as a symbolic link
+    ln -s /path/to/Rosella/rosella rosella
+
+    $ parrot setup.pir
+    $ parrot setup.pir test
+    $ parrot setup.pir clean
+    # parrot setup.pir install
+
 __t/harness__
 #! parrot-nqp
 INIT {
@@ -372,7 +375,57 @@ function main[main]() {
 [% END %]
 
 [% IF object.test_system == ROSELLA_NQP %]
-__t/00-sanity.t__
+__README__
+Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+You need to add path to rosella library on you project as a symbolic link
+    ln -s /path/to/Rosella/rosella rosella
+
+    $ parrot setup.pir
+    $ parrot setup.pir test
+    $ parrot setup.pir clean
+    # parrot setup.pir install
+
+__t/harness__
+#! parrot-nqp
+INIT {
+	my $rosella := pir::load_bytecode__ps('rosella/core.pbc');
+	Rosella::initialize_rosella("harness");
+}
+
+my $harness := Rosella::construct(Rosella::Harness);
+
+$harness.add_test_dirs("NQP", "t/nqp", :recurse(1)).setup_test_run;
+
+$harness.run();
+$harness.show_results;
+
+__t/nqp/00-sanity.t__
+INIT {
+    my $rosella := pir::load_bytecode__PS("rosella/core.pbc");
+    Rosella::initialize_rosella("test");
+    Rosella::load_bytecode_file('[% object.name %]/[% object.name %].pbc', "load");
+}
+
+Rosella::Test::test(Test_NQP_Tests);
+
+class Test_NQP_Tests {
+
+    method test_rand() {
+        my $rnd := [% object.name %]::[% object.name %]::rand();
+        $!assert.defined($rnd);
+    }
+
+    method test_srand() {
+        my $seed;
+        [% object.name %]::[% object.name %]::srand($seed);
+    }
+
+    method test_rand_max() {
+        $!assert.equal([% object.name %]::[% object.name %]::RAND_MAX(),32767);
+    }
+
+}
 
 [% END %]
 __END__
