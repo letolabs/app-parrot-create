@@ -3,6 +3,26 @@
 [% END %]
 
 [% IF object.build_system == WINXED %]
+__README__
+Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+[% SWITCH object.test_system %]
+[%  CASE [ ROSELLA_WINXED, ROSELLA_NQP ] %]
+You need to add path to rosella library on you project as a symbolic link:
+    ln -s /path/to/Rosella/rosella rosella
+[%  CASE [ PERL5 ] %]
+You need to add path to parrot library on you project as a symbolic link:
+    ln -s /path/to/parrot/lib lib
+And parrot executable file:
+    ln -s /path/to/parrot/parrot parrot
+[%  CASE DEFAULT %]    
+[% END %]    
+
+    $ winxed setup.winxed
+    $ winxed setup.winxed test
+    $ winxed setup.winxed clean
+    # winxed setup.winxed install
+
 __setup.winxed__
 $include_const "iglobals.pasm";
 $loadlib "io_ops";
@@ -39,13 +59,37 @@ function main[main](argv) {
 
 function do_test() {
   int result;
+[% IF object.test_system == PERL5 %]
+  string cmd = "perl t/[% object.name %].t";
+[% ELSE %]
   string cmd = "parrot-nqp t/harness";
+[% END %]
   ${ spawnw result, cmd };
   ${ exit result };
 }
 [% END %]
 
 [% IF object.build_system == NQP %]
+__README__
+Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+[% SWITCH object.test_system %]
+[%  CASE [ ROSELLA_WINXED, ROSELLA_NQP ] %]
+You need to add path to rosella library on you project as a symbolic link:
+    ln -s /path/to/Rosella/rosella rosella
+[%  CASE PERL5 %]
+You need to add path to parrot library on you project as a symbolic link:
+    ln -s /path/to/parrot/lib lib
+And parrot executable file:
+    ln -s /path/to/parrot/parrot parrot
+[%  CASE DEFAULT %]    
+[% END %]    
+
+    $ parrot-nqp setup.nqp
+    $ parrot-nqp setup.nqp test
+    $ parrot-nqp setup.nqp clean
+    # parrot-nqp setup.nqp install
+
 __setup.nqp__
 #!/usr/bin/env parrot-nqp
 
@@ -104,8 +148,14 @@ sub MAIN() {
 sub hash     (*%h ) { %h }
 sub unflatten(*@kv) { my %h; for @kv -> $k, $v { %h{$k} := $v }; %h }
 sub do_test() {
-    my $nqp := get_nqp();
-    my $result := pir::spawnw__IS($nqp ~ " t/harness");
+[% IF object.test_system == PERL5 %]
+    my $run     := "perl";
+    my $file    := " t/[% object.name %].t";
+[% ELSE %]
+    my $run     := get_nqp();
+    my $file    := " t/harness";
+[% END %]
+    my $result := pir::spawnw__IS($run ~ $file);
     pir::exit(+$result);
 }
 
@@ -123,6 +173,26 @@ MAIN();
 [% END %]
 
 [% IF object.build_system == PIR %]
+__README__
+Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+[% SWITCH object.test_system %]
+[%  CASE [ ROSELLA_WINXED, ROSELLA_NQP ] %]
+You need to add path to rosella library on you project as a symbolic link:
+    ln -s /path/to/Rosella/rosella rosella
+[%  CASE [ PERL5 ] %]
+You need to add path to parrot library on you project as a symbolic link:
+    ln -s /path/to/parrot/lib lib
+And parrot executable file:
+    ln -s /path/to/parrot/parrot parrot
+[%  CASE DEFAULT %]    
+[% END %] 
+
+    $ parrot setup.pir
+    $ parrot setup.pir test
+    $ parrot setup.pir clean
+    # parrot setup.pir install
+
 __setup.pir__
 #!/usr/bin/env parrot
 
@@ -192,7 +262,11 @@ No Configure step, no Makefile generated.
 
 .sub 'do_test' :subid('WSubId_1')
     null $I1
+[% IF object.test_system == PERL5 %]
+    set $S1, "perl t/[% object.name %].t"
+[% ELSE %]
     set $S1, "parrot-nqp t/harness"
+[% END %]    
     spawnw $I1, $S1
     exit $I1
 
@@ -314,22 +388,53 @@ Revision
 __[% object.name %]/.ignore__
 
 [% IF object.test_system == PERL5 %]
-__t/00-sanity.t__
+__t/[% object.name %].t__
+#! perl
+use strict;
+use warnings;
+use lib qw( t . lib ../lib ../../lib );
+
+use Test::More;
+use Parrot::Test tests => 1;
+
+pir_output_is( <<'CODE', <<'OUT', "[% object.name %];[% object.name %]" );
+.sub main :main
+    load_bytecode '[% object.name %]/[% object.name %].pbc'
+
+    test_rand()
+    test_srand()
+    test_rand_max()
+.end
+
+.sub test_rand
+    .local pmc rand
+    rand = get_global [ '[% object.name %]'; '[% object.name %]' ], 'rand'
+    $I0 = rand()
+.end
+
+.sub test_srand
+	.local pmc srand
+    srand = get_global [ '[% object.name %]'; '[% object.name %]' ], 'srand'
+    srand(1)
+.end
+
+.sub test_rand_max
+    .local pmc rand_max
+    rand_max = get_global [ '[% object.name %]'; '[% object.name %]' ], 'RAND_MAX'
+    $I0 = rand_max()
+.end
+CODE
+OUT
+
+# Local Variables:
+#   mode: pir
+#   fill-column: 100
+# End:
+# vim: expandtab shiftwidth=4 ft=pir:
 
 [% END %]
 
 [% IF object.test_system == ROSELLA_WINXED %]
-__README__
-Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
-
-You need to add path to rosella library on you project as a symbolic link
-    ln -s /path/to/Rosella/rosella rosella
-
-    $ parrot setup.pir
-    $ parrot setup.pir test
-    $ parrot setup.pir clean
-    # parrot setup.pir install
-
 __t/harness__
 #! parrot-nqp
 INIT {
@@ -375,17 +480,6 @@ function main[main]() {
 [% END %]
 
 [% IF object.test_system == ROSELLA_NQP %]
-__README__
-Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
-
-You need to add path to rosella library on you project as a symbolic link
-    ln -s /path/to/Rosella/rosella rosella
-
-    $ parrot setup.pir
-    $ parrot setup.pir test
-    $ parrot setup.pir clean
-    # parrot setup.pir install
-
 __t/harness__
 #! parrot-nqp
 INIT {
