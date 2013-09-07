@@ -20,7 +20,6 @@ And parrot executable file:
 
     $ winxed setup.winxed
     $ winxed setup.winxed test
-    $ winxed setup.winxed clean
     # winxed setup.winxed install
 
 __setup.winxed__
@@ -87,7 +86,6 @@ And parrot executable file:
 
     $ parrot-nqp setup.nqp
     $ parrot-nqp setup.nqp test
-    $ parrot-nqp setup.nqp clean
     # parrot-nqp setup.nqp install
 
 __setup.nqp__
@@ -190,7 +188,6 @@ And parrot executable file:
 
     $ parrot setup.pir
     $ parrot setup.pir test
-    $ parrot setup.pir clean
     # parrot setup.pir install
 
 __setup.pir__

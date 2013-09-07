@@ -5,8 +5,21 @@
 [% IF object.build_system == WINXED %]
 __README__
 Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+[% SWITCH object.test_system %]
+[%  CASE [ ROSELLA_WINXED, ROSELLA_NQP ] %]
+You need to add path to rosella library on you project as a symbolic link:
+    ln -s /path/to/Rosella/rosella rosella
+[%  CASE [ PERL5 ] %]
+You need to add path to parrot library on you project as a symbolic link:
+    ln -s /path/to/parrot/lib lib
+And parrot executable file:
+    ln -s /path/to/parrot/parrot parrot
+[%  CASE DEFAULT %]    
+[% END %]
+
     $ winxed setup.winxed
-    $ winxed setup.winxed clean
+    $ winxed setup.winxed test
     # winxed setup.winxed install
 
 __setup.winxed__
@@ -55,17 +68,44 @@ function main[main](argv) {
         "manifest_includes" : ["README", "setup.winxed"]
     };
 
+    if (argv[1] == "test")
+    	do_test();
+
     load_bytecode('distutils.pir');
     using setup;
 
     argv.shift();
     setup(argv, parrot_[% object.name %]);
 }
+
+function do_test() {
+  int result;
+[% IF object.test_system == PERL5 %]
+  string cmd = "perl t/[% object.name %].t";
+[% ELSE %]
+  string cmd = "parrot-nqp t/harness";
+[% END %]
+  ${ spawnw result, cmd };
+  ${ exit result };
+}
 [% END %]
 
 [% IF object.build_system == NQP %]
 __README__
 Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+[% SWITCH object.test_system %]
+[%  CASE [ ROSELLA_WINXED, ROSELLA_NQP ] %]
+You need to add path to rosella library on you project as a symbolic link:
+    ln -s /path/to/Rosella/rosella rosella
+[%  CASE [ PERL5 ] %]
+You need to add path to parrot library on you project as a symbolic link:
+    ln -s /path/to/parrot/lib lib
+And parrot executable file:
+    ln -s /path/to/parrot/parrot parrot
+[%  CASE DEFAULT %]    
+[% END %]
+
     $ parrot-nqp setup.nqp
     $ parrot-nqp setup.nqp test
     # parrot-nqp setup.nqp install
@@ -140,12 +180,28 @@ sub MAIN() {
     my @*ARGS := pir::getinterp__P()[2];
        @*ARGS.shift;
 
+    if @*ARGS[0] eq "test" {
+        do_test();
+        pir::exit__vI(0);
+    }
+
     setup(@*ARGS, %config);
 }
 
 # Work around minor nqp-rx limitations
 sub hash     (*%h ) { %h }
 sub unflatten(*@kv) { my %h; for @kv -> $k, $v { %h{$k} := $v }; %h }
+sub do_test() {
+[% IF object.test_system == PERL5 %]
+    my $run     := "perl";
+    my $file    := " t/[% object.name %].t";
+[% ELSE %]
+    my $run     := get_nqp();
+    my $file    := " t/harness";
+[% END %]
+    my $result := pir::spawnw__IS($run ~ $file);
+    pir::exit(+$result);
+}
 
 # Start it up!
 MAIN();
@@ -163,6 +219,19 @@ MAIN();
 [% IF object.build_system == PIR %]
 __README__
 Language '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+[% SWITCH object.test_system %]
+[%  CASE [ ROSELLA_WINXED, ROSELLA_NQP ] %]
+You need to add path to rosella library on you project as a symbolic link:
+    ln -s /path/to/Rosella/rosella rosella
+[%  CASE [ PERL5 ] %]
+You need to add path to parrot library on you project as a symbolic link:
+    ln -s /path/to/parrot/lib lib
+And parrot executable file:
+    ln -s /path/to/parrot/parrot parrot
+[%  CASE DEFAULT %]    
+[% END %]
+
     $ parrot setup.pir
     $ parrot setup.pir test
     # parrot setup.pir install
@@ -180,14 +249,15 @@ No Configure step, no Makefile generated.
 
 =head1 USAGE
 
-    $ parrot setup.pir build
+    $ parrot setup.pir
     $ parrot setup.pir test
-    $ sudo parrot setup.pir install
+    # parrot setup.pir install
 
 =cut
 
 .sub 'main' :main
     .param pmc args
+.const 'Sub' WSubId_1 = "WSubId_1"
     $S0 = shift args
     load_bytecode 'distutils.pbc'
 
@@ -259,9 +329,11 @@ SOURCES
     $P0['installable_pbc'] = $P7
 
     # test
-    $S0 = get_parrot()
-    $S0 .= ' [% object.name %].pbc'
-    $P0['prove_exec'] = $S0
+    $P3 = args[1]
+    set $S1, $P3
+    ne $S1, "test", __label_1
+    WSubId_1()
+  __label_1: # endif
 
     # install
     $P0['inst_lang'] = '[% object.name %]/[% object.name %].pbc'
@@ -272,6 +344,17 @@ SOURCES
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
 
+.sub 'do_test' :subid('WSubId_1')
+    null $I1
+[% IF object.test_system == PERL5 %]
+    set $S1, "perl t/[% object.name %].t"
+[% ELSE %]
+    set $S1, "parrot-nqp t/harness"
+[% END %]    
+    spawnw $I1, $S1
+    exit $I1
+
+.end # do_test
 
 # Local Variables:
 #   mode: pir
@@ -765,7 +848,196 @@ inline op [% object.name %]_pmc_addr(out INT, invar PMC) :base_core {
 [% END %]
 
 [% IF object.test_system == PERL5 %]
-__t/00-sanity.t__
+__t/[% object.name %].t__
+#!perl
+# Copyright (C) 2001-2009, Parrot Foundation.
+
+use strict;
+use warnings;
+use lib qw( t . .. lib ../lib ../../lib ../../../lib ../../../../lib );
+use Test::More;
+use Parrot::Test;
+use Parrot::Config;
+
+=head1 NAME
+
+[% object.name %].t - test harness for Parrot [% object.name %]
+
+=head1 DESCRIPTION
+
+This file is the current implementation for the [% object.name %] test harness. The
+tests are actually in simple text files, this harness given this list of
+tests sources, executes all the tests.
+
+The test source is a plain text file divided in three columns. The
+columns are separated by three white spaces C<\s{3,}> or at least one
+tab C<\t+>. The three columns are:
+
+=over 4
+
+=item B<expression>
+
+The exact expression that is passed to the [% object.name %] compiler as source code.
+This input is pasted as a double quotes delimited string into PIR code.
+This means that you can use \n to indicate newlines.
+
+=item B<expected>
+
+The expected result for the compiled source. Note that you can (and
+probably should) use C<\n> in the expected result to represent newlines.
+
+=item B<description>
+
+This should be a string describing the test that is being made.
+
+=back
+
+Since this is supposed to be a temporary harness. We're expecting to be
+able to capture the result of the compilation to write this file in PIR.
+The skip and todo tests are defined in the test source file itself, so
+that later when the harness is changed we don't have to bother to convert
+the skip/todo tests list. So, you can simply set a test to be todo or
+skipped by adding the C<SKIP> or C<TODO> keywords in the begin of the
+test description. For example:
+
+1+2+3           6       SKIP no add operation yet
+1-2-3           6       TODO no minus operation yet
+
+B<NOTE:> to add more source test files remember to update the C<@files>
+array in this file.
+
+=head1 SYNOPSIS
+
+$ prove t/[% object.name %].t
+
+=cut
+
+# [% object.name %] build directory
+my $[% object.name %]dir = "./";
+
+# files to load tests from
+my @files = qw(
+    [% object.name %]_basic
+);
+
+# for each test file given calculate full path
+my @test_files = map { "$[% object.name %]dir/t/$_" } @files;
+
+# calculate total number of tests
+my $numtests = 0;
+foreach my $f (@test_files) {
+    open my $TEST_FILE, '<', $f;
+
+    # for each line in the given files if it's not a comment line
+    # or an empty line, the it's a test
+    while (<$TEST_FILE>) { $numtests++ unless ( ( $_ =~ m/^#/ ) or ( $_ =~ m/^\s*$/ ) ); }
+}
+
+# set plan
+plan tests => $numtests;
+
+# main loop
+foreach my $file (@test_files) {
+    open my $TEST_FILE, '<', $file or die "can't open file";
+    while (<$TEST_FILE>) {
+        chomp;
+        s/\r//g;
+
+        # skip comment lines
+        $_ =~ /^#/ and next;
+
+        # skip empty lines
+        $_ =~ /^\s*$/ and next;
+
+        # split by tabs or 3+ spaces
+        my ( $expr, $expect, $description ) = split / *\t\s*|\s{3,}/, $_;
+
+        # do some simple checking
+        if ( $expr eq '' or $expect eq '' or $description eq '' ) {
+            warn "$file line $. doesn't match a valid test!";
+            next;
+        }
+
+        $expr =~ s/"/\\"/g;           # Escape the '"', as $expr will be
+                                      # enclosed by '"' in the generated PIR
+
+        $expect =~ s/^'(.*)'$/$1/;    # remove surrounding quotes (for '')
+        $expect =~ s/\\n/\n/g;        # treat \n as newline
+
+        # build pir code
+        my $pir_code = [% object.name %]_template();
+        $pir_code =~ s/<<EXPR>>/$expr/g;
+
+        # check if we need to skip this test
+        if ( $description =~ m/^(SKIP|skip)\s+(.*)/ ) {
+        SKIP: {
+                skip $2, 1;
+                pir_output_is( $pir_code, $expect, $description );
+            }
+            next;
+        }
+
+        # check if we need to todo this test
+        if ( $description =~ m/^(TODO|todo)\s+(.*)/ ) {
+            my @todo = ();
+            push @todo, todo => $2;
+            pir_output_is( $pir_code, $expect, $description, @todo );
+            next;
+        }
+
+        # no skip or todo -- run test
+        pir_output_is( $pir_code, $expect, $description );
+    }
+}
+
+# end
+exit;
+
+sub [% object.name %]_template {
+    return <<"PIR";
+.sub 'main' :main
+    load_bytecode '[% object.name %]/[% object.name %].pbc'
+    .local pmc compiler, code, result
+    compiler = compreg '[% object.name %]'
+    code = compiler.'compile'("<<EXPR>>")
+    result = code()
+    say result
+.end
+PIR
+}
+
+=head1 AUTHOR
+
+Nuno 'smash' Carvalho  <mestre.smash@gmail.com>
+
+=cut
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 100
+# End:
+# vim: expandtab shiftwidth=4:
+
+
+__t/[% object.name %]_basic__
+# single non-negative integer
+1                       1\n             positive int 1
+0                       0\n             zero
+2                       2\n             positive int
+12345678                12345678\n      another positive int
+
+
+# binary plus
+1+2                     3\n             two summands
+1+2+3                   6\n             three summands
+1+0+3                   4\n             three summands including 0
+1+2+3+4+5+6+7+8+9+10    55\n            ten summands
+
+# binary minus
+2-1                      1\n            subtraction with two operands
+1-1                      0\n            subtraction with two operands
+1-2                     -1\n            subtraction with two operands
 
 [% END %]
 
