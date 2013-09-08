@@ -1025,7 +1025,83 @@ __t/[% object.name %]_basic__
 [% END %]
 
 [% IF object.test_system == ROSELLA_WINXED %]
-__t/00-sanity.t__
+__t/harness__
+#! parrot-nqp
+INIT {
+	my $rosella := pir::load_bytecode__ps('rosella/core.pbc');
+	Rosella::initialize_rosella("harness");
+}
+
+my $harness := Rosella::construct(Rosella::Harness);
+
+$harness.add_test_dirs("Winxed", "t/winxed", :recurse(1)).setup_test_run;
+
+$harness.run();
+$harness.show_results;
+
+__t/winxed/00-sanity.t__
+$load "rosella/test.pbc";
+$load "[% object.name %]/[% object.name %].pbc";
+
+class Test_Winxed_Tests {
+    function number_test() {
+        var compiler = compreg('[% object.name %]');
+        var code= compiler.compile("1");
+        var result=code();
+        self.assert.equal(result,1);
+        
+        code= compiler.compile("0");
+        result=code();
+        self.assert.equal(result,0);
+        
+        code= compiler.compile("2");
+        result=code();
+        self.assert.equal(result,2);
+        
+        code= compiler.compile("12345678");
+        result=code();
+        self.assert.equal(result,12345678);
+    }
+
+    function pluses_test() {
+        var compiler = compreg('[% object.name %]');
+        var code= compiler.compile("1+2");
+        var result=code();
+        self.assert.equal(result,3);
+        
+        code= compiler.compile("1+2+3");
+        result=code();
+        self.assert.equal(result,6);
+        
+        code= compiler.compile("1+0+3");
+        result=code();
+        self.assert.equal(result,4);
+        
+        code= compiler.compile("1+2+3+4+5+6+7+8+9+10");
+        result=code();
+        self.assert.equal(result,55);
+    }
+    
+    function minuses_test() {
+        var compiler = compreg('[% object.name %]');
+        var code= compiler.compile("2-1");
+        var result=code();
+        self.assert.equal(result,1);
+        
+        code= compiler.compile("1-1");
+        result=code();
+        self.assert.equal(result,0);
+        
+        code= compiler.compile("1-2");
+        result=code();
+        self.assert.equal(result,-1);
+    }
+}
+
+function main[main]() {
+    using Rosella.Test.test;
+    test(class Test_Winxed_Tests);
+}
 
 [% END %]
 
