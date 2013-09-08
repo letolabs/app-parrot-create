@@ -255,94 +255,77 @@ No Configure step, no Makefile generated.
 
 =cut
 
+.loadlib "io_ops"
+# end libs
+.namespace [ ]
+
 .sub 'main' :main
-    .param pmc args
+        .param pmc __ARG_1
 .const 'Sub' WSubId_1 = "WSubId_1"
-    $S0 = shift args
-    load_bytecode 'distutils.pbc'
-
-    .local int reqsvn
-    $P0 = new 'FileHandle'
-    $P0.'open'('PARROT_REVISION', 'r')
-    $S0 = $P0.'readline'()
-    reqsvn = $S0
-    $P0.'close'()
-
-    .local pmc config
-    config = get_config()
-    $I0 = config['revision']
-    unless $I0 goto L1
-    unless reqsvn > $I0 goto L1
-    $S1 = "Parrot revision r"
-    $S0 = reqsvn
-    $S1 .= $S0
-    $S1 .= " required (currently r"
-    $S0 = $I0
-    $S1 .= $S0
-    $S1 .= ")\n"
-    print $S1
-    end
-  L1:
-
-    $P0 = new 'Hash'
-    $P0['name'] = '[% object.name %]'
-    $P0['abstract'] = 'the [% object.name %] compiler'
-    $P0['description'] = 'the [% object.name %] for Parrot VM.'
-
+    root_new $P1, ['parrot';'Hash']
+    $P1["name"] = '[% object.name %]'
+    $P1["abstract"] = 'the [% object.name %] compiler'
+    $P1["description"] = 'the [% object.name %] for Parrot VM.'
+    $P1["authority"] = ''
+    $P1["copyright_holder"] = ''
+    root_new $P3, ['parrot';'ResizablePMCArray']
+    assign $P3, 2
+    $P3[0] = "parrot"
+    $P3[1] = "[% object.name %]"
+    $P1["keywords"] = $P3
+    $P1["license_type"] = ''
+    $P1["license_uri"] = ''
+    $P1["checkout_uri"] = ''
+    $P1["browser_uri"] = ''
+    $P1["project_uri"] = ''
 [% IF object.with_ops %]
-    # build
-    $P1 = new 'Hash'
-    $P1['[% object.name %]_ops'] = 'src/ops/[% object.name %].ops'
-    $P0['dynops'] = $P1
+    root_new $P4, ['parrot';'Hash']
+    $P4['[% object.name %]_ops'] = 'src/ops/[% object.name %].ops'
+    $P1["dynops"] = $P4
 [% END %]
-
 [% IF object.with_pmc %]
-    # build
-    $P2 = new 'Hash'
-    $P3 = split ' ', 'src/pmc/[% object.name %].pmc'
-    $P2['[% object.name %]_group'] = $P3
-    $P0['dynpmc'] = $P2
-[% END %]
-
-    $P4 = new 'Hash'
-    $P4['src/gen_actions.pir'] = 'src/[% object.name %]/Actions.pm'
-    $P4['src/gen_compiler.pir'] = 'src/[% object.name %]/Compiler.pm'
-    $P4['src/gen_grammar.pir'] = 'src/[% object.name %]/Grammar.pm'
-    $P4['src/gen_runtime.pir'] = 'src/[% object.name %]/Runtime.pm'
-    $P0['pir_nqp-rx'] = $P4
-
-    $P5 = new 'Hash'
-    $P6 = split "\n", <<'SOURCES'
-src/[% object.name %].pir
-src/gen_actions.pir
-src/gen_compiler.pir
-src/gen_grammar.pir
-src/gen_runtime.pir
-SOURCES
-    $S0 = pop $P6
-    $P5['[% object.name %]/[% object.name %].pbc'] = $P6
-    $P5['[% object.name %].pbc'] = '[% object.name %].pir'
-    $P0['pbc_pir'] = $P5
-
-    $P7 = new 'Hash'
-    $P7['parrot-[% object.name %]'] = '[% object.name %].pbc'
-    $P0['installable_pbc'] = $P7
-
-    # test
-    $P3 = args[1]
+    root_new $P5, ['parrot';'Hash']
+    $P5['[% object.name %]_group'] = 'src/pmc/[% object.name %].pmc'
+    $P1["dynpmc"] = $P5
+[% END %]    
+    root_new $P6, ['parrot';'Hash']
+    $P6['src/gen_actions.pir'] = 'src/[% object.name %]/Actions.pm'
+    $P6['src/gen_compiler.pir'] = 'src/[% object.name %]/Compiler.pm'
+    $P6['src/gen_grammar.pir'] = 'src/[% object.name %]/Grammar.pm'
+    $P6['src/gen_runtime.pir'] = 'src/[% object.name %]/Runtime.pm'
+    $P1["pir_nqprx"] = $P6
+    root_new $P7, ['parrot';'Hash']
+    $P7['[% object.name %]/[% object.name %].pbc'] = 'src/[% object.name %].pir'
+    $P7['[% object.name %].pbc'] = '[% object.name %].pir'
+    $P1["pbc_pir"] = $P7
+    root_new $P8, ['parrot';'Hash']
+    $P8['installable_[% object.name %]'] = '[% object.name %].pbc'
+    $P1["exe_pbc"] = $P8
+    root_new $P9, ['parrot';'Hash']
+    $P9['parrot-[% object.name %]'] = '[% object.name %].pbc'
+    $P1["installable_pbc"] = $P9
+    root_new $P10, ['parrot';'ResizablePMCArray']
+    assign $P10, 2
+    $P10[0] = '[% object.name %].pbc'
+    $P10[1] = 'installable_[% object.name %]'
+    $P1["inst_lang"] = $P10
+    root_new $P11, ['parrot';'ResizablePMCArray']
+    assign $P11, 2
+    $P11[0] = "README"
+    $P11[1] = "setup.pir"
+    $P1["manifest_includes"] = $P11
+    $P3 = __ARG_1[1]
     set $S1, $P3
     ne $S1, "test", __label_1
     WSubId_1()
   __label_1: # endif
+    load_bytecode 'distutils.pir'
+    get_hll_global $P2, 'setup'
+    __ARG_1.'shift'()
+    $P2(__ARG_1, $P1)
 
-    # install
-    $P0['inst_lang'] = '[% object.name %]/[% object.name %].pbc'
+.end # main
 
-    # dist
-    $P0['doc_files'] = 'README'
-
-    .tailcall setup(args :flat, $P0 :flat :named)
-.end
 
 .sub 'do_test' :subid('WSubId_1')
     null $I1
