@@ -1106,7 +1106,85 @@ function main[main]() {
 [% END %]
 
 [% IF object.test_system == ROSELLA_NQP %]
-__t/00-sanity.t__
+__t/harness__
+#! parrot-nqp
+INIT {
+	my $rosella := pir::load_bytecode__ps('rosella/core.pbc');
+	Rosella::initialize_rosella("harness");
+}
+
+my $harness := Rosella::construct(Rosella::Harness);
+
+$harness.add_test_dirs("NQP", "t/nqp", :recurse(1)).setup_test_run;
+
+$harness.run();
+$harness.show_results;
+
+__t/nqp/00-sanity.t__
+INIT {
+    my $rosella := pir::load_bytecode__PS("rosella/core.pbc");
+    Rosella::initialize_rosella("test");
+    Rosella::load_bytecode_file('[% object.name %]/[% object.name %].pbc', "load");
+}
+
+Rosella::Test::test(Test_NQP_Tests);
+
+class Test_NQP_Tests {
+
+    method number_test() {
+        my $compiler := Q:PIR { %r = compreg '[% object.name %]' };
+        my $code := $compiler.compile("1");
+        my $result := $code();
+        $!assert.equal($result,1);
+        
+        $code := $compiler.compile("0");
+        $result := $code();
+        $!assert.equal($result,0);
+        
+        $code := $compiler.compile("2");
+        $result := $code();
+        $!assert.equal($result,2);
+        
+        $code := $compiler.compile("12345678");
+        $result := $code();
+        $!assert.equal($result,12345678);
+    }
+    
+    method pluses_test() {
+        my $compiler := Q:PIR { %r = compreg '[% object.name %]' };
+        my $code := $compiler.compile("1+2");
+        my $result := $code();
+        $!assert.equal($result,3);
+        
+        $code := $compiler.compile("1+2+3");
+        $result := $code();
+        $!assert.equal($result,6);
+        
+        $code := $compiler.compile("1+0+3");
+        $result := $code();
+        $!assert.equal($result,4);
+        
+        $code := $compiler.compile("1+2+3+4+5+6+7+8+9+10");
+        $result := $code();
+        $!assert.equal($result,55);
+    }
+    
+    method minuses_test() {
+        my $compiler := Q:PIR { %r = compreg '[% object.name %]' };
+        my $code := $compiler.compile("2-1");
+        my $result := $code();
+        $!assert.equal($result,1);
+        
+        $code := $compiler.compile("1-1");
+        $result := $code();
+        $!assert.equal($result,0);
+        
+        $code := $compiler.compile("1-2");
+        $result := $code();
+        $!assert.equal($result,-1);
+    }
+
+}
 
 [% END %]
 __END__
