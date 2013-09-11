@@ -22,6 +22,3 @@
     
 # VIEW #
     http://127.0.0.1:3000
-    
-GSoC students are currently being deployed to fix some of these bugs and bring this important
-project back to life.

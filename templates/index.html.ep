@@ -61,8 +61,12 @@
 <div id="newlang-content" class="row-fluid" >
     <div id="newlang-info" class="span8 hero-unit column">
         <h1>High Level Language</h1>
-        <p>Some info about HLL.</p>
-        <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <p>The main purpose of a virtual machine is to run programs.
+        These programs are typically written in some High Level Language (HLL).
+        Some well-known dynamic languages (sometimes referred to as scripting languages) are Lua, Perl, PHP, Python, Ruby, and Tcl.
+        Parrot is designed to be able to run all these languages.
+        Each language that Parrot hosts needs a compiler to parse the syntax of the language and generate Parrot instructions.</p>
+        <p><a href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Squaak_Tutorial" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
     
     <div id="newlang-options" class="well span4 column">
