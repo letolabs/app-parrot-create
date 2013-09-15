@@ -13,8 +13,10 @@
 <div id="newlib-content" class="row-fluid" style="display: none" >
     <div id="newlib-info" class="span8 hero-unit column">
         <h1>Parrot library</h1>
-        <p>Some information about parrot library.</p>
-        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <p>Libraries are precompiled code files that can be loaded into Parrot.
+        A lot of examples allow easily create your own solutions.
+        </p>
+        <p><a href="http://docs.parrot.org/parrot/devel/html/docs/book/draft/chXX_library.pod.html" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
     
     <div id="newlib-options" class="well span4 column">
@@ -61,12 +63,11 @@
 <div id="newlang-content" class="row-fluid" >
     <div id="newlang-info" class="span8 hero-unit column">
         <h1>High Level Language</h1>
-        <p>The main purpose of a virtual machine is to run programs.
-        These programs are typically written in some High Level Language (HLL).
-        Some well-known dynamic languages (sometimes referred to as scripting languages) are Lua, Perl, PHP, Python, Ruby, and Tcl.
-        Parrot is designed to be able to run all these languages.
-        Each language that Parrot hosts needs a compiler to parse the syntax of the language and generate Parrot instructions.</p>
-        <p><a href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Squaak_Tutorial" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <p>
+            Parrot VM is providing powerful tools to make writing a compiler childishly easy.
+            Parrot Compiler Toolkit making Parrot an interesting target for language developers.
+        <p>
+        <a href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Squaak_Tutorial" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
     
     <div id="newlang-options" class="well span4 column">
@@ -128,25 +129,25 @@
 <div class="container-fluid well">
     <div class="row-fluid">
         <div class="span4 column">
-            <h4><a class="btn-link" href="#">Build Systems</a></h4>
-            <p><a class="btn-link" href="#">Winxed</a></p>
-            <p><a class="btn-link" href="#">NQR</a></p>
-            <p><a class="btn-link" href="#">PIR</a></p>
-            <p><a class="btn-link" href="#">Perl 5</a></p>
+            <h4><a class="btn-link" href="http://en.wikipedia.org/wiki/Parrot_virtual_machine#Languages">Build Systems</a></h4>
+            <p><a class="btn-link" href="http://whiteknight.github.io/Rosella/winxed/">Winxed</a></p>
+            <p><a class="btn-link" href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Not_Quite_Perl">NQR</a></p>
+            <p><a class="btn-link" href="http://en.wikipedia.org/wiki/Parrot_intermediate_representation">PIR</a></p>
+            <p><a class="btn-link" href="http://en.wikipedia.org/wiki/Perl">Perl 5</a></p>
         </div>
     
         <div class="span4 column">
-            <h4><a class="btn-link" href="#">Test Systems</a></h4>
-            <p><a class="btn-link" href="#">Rosella(Winxed)</a></p>
-            <p><a class="btn-link" href="#">Rosella(NQR)</a></p>
-            <p><a class="btn-link" href="#">Perl 5</a></p>
+            <h4><a class="btn-link" href="http://docs.parrot.org/parrot/latest/html/docs/tests.pod.html">Test Systems</a></h4>
+            <p><a class="btn-link" href="http://whiteknight.github.io/Rosella/libraries/test.html#winxed">Rosella(Winxed)</a></p>
+            <p><a class="btn-link" href="http://whiteknight.github.io/Rosella/libraries/test.html#nqprx">Rosella(NQR)</a></p>
+            <p><a class="btn-link" href="http://docs.parrot.org/parrot/latest/html/docs/tests.pod.html#Testing_Perl5_components">Perl 5</a></p>
         </div>
         
         <div class="span4 column">
-            <h4><a class="btn-link" href="#">Options</a></h4>
-            <p><a class="btn-link" href="#">Custom PMCs</a></p>
-            <p><a class="btn-link" href="#">Custom ops</a></p>
-            <p><a class="btn-link" href="#">Design Doc templates (POD)</a></p>
+            <h4><a class="btn-link" href="http://docs.parrot.org/parrot/devel/html/docs/overview.pod.html">Options</a></h4>
+            <p><a class="btn-link" href="http://docs.parrot.org/parrot/latest/html/pmc.html">Custom PMCs</a></p>
+            <p><a class="btn-link" href="http://docs.parrot.org/parrot/latest/html/ops.html">Custom ops</a></p>
+            <p><a class="btn-link" href="http://docs.parrot.org/parrot/devel/html/pdds.html">Design Doc templates (POD)</a></p>
         </div>
     </div>
 </div>
