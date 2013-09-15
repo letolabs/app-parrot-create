@@ -1,4 +1,127 @@
 [% IF object.build_system == PERL5 %]
+__README__
+Library '[% object.name %]' with [% object.build_system %] build system and [% object.test_system %] test system.
+
+[% SWITCH object.test_system %]
+[%  CASE [ ROSELLA_WINXED, ROSELLA_NQP ] %]
+You need to add path to rosella library on you project as a symbolic link:
+    ln -s /path/to/Rosella/rosella rosella
+[%  CASE [ PERL5 ] %]
+You need to add path to parrot library on you project as a symbolic link:
+    ln -s /path/to/parrot/lib lib
+And parrot executable file:
+    ln -s /path/to/parrot/parrot parrot
+[%  CASE DEFAULT %]    
+[% END %]    
+
+    $ perl setup.pl
+    $ perl setup.pl test
+    # perl setup.pl install
+
+__setup.pl__
+#! perl
+use strict;
+use warnings;
+use lib qw( t . lib ../lib ../../lib );
+use Parrot::Config;
+use Parrot::Test::Util 'create_tempfile';
+
+
+sub pir_setup {
+    my ($code, $param) = @_;
+
+    my $stuff = sub {
+        # Put the string on a file.
+        my $string = shift;
+
+        my (undef, $file) = create_tempfile(UNLINK => 1);
+        open(my $out, '>', $file)
+            or die "Unable to open tempfile for writing: $!";
+        binmode $out;
+        print $out $string;
+        return $file;
+    };
+
+    # Write the input and code strings.
+    my $input_file = $stuff->('tmp');
+    my $code_file = $stuff->($code);
+
+    my $parrot = ".$PConfig{slash}parrot$PConfig{exe}";
+    # Slurp and compare the output.
+    my $result = do {
+        local $/;
+        open(my $in, '-|', "$parrot $code_file < $input_file $param")
+            or die "Unable to pipe output to us: $!";
+        <$in>;
+    };
+    $result =~ s/(^==\d+==.*\n)//mg if defined $ENV{VALGRIND};
+    return $result;
+}
+
+my $argv = $ARGV[0] || '';
+my $result = pir_setup(<<'CODE',$argv);
+.loadlib "io_ops"
+# end libs
+.namespace [ ]
+
+.sub 'main' :main
+        .param pmc __ARG_1
+.const 'Sub' WSubId_1 = "WSubId_1"
+    root_new $P1, ['parrot';'Hash']
+    $P1["name"] = '[% object.name %]'
+    $P1["abstract"] = 'the [% object.name %] library'
+    $P1["description"] = 'the [% object.name %] for Parrot VM.'
+    $P1["authority"] = ''
+    $P1["copyright_holder"] = ''
+    root_new $P3, ['parrot';'ResizablePMCArray']
+    assign $P3, 2
+    $P3[0] = "parrot"
+    $P3[1] = "[% object.name %]"
+    $P1["keywords"] = $P3
+    $P1["license_type"] = ''
+    $P1["license_uri"] = ''
+    $P1["checkout_uri"] = ''
+    $P1["browser_uri"] = ''
+    $P1["project_uri"] = ''
+    root_new $P4, ['parrot';'Hash']
+    $P4['[% object.name %]/[% object.name %].pbc'] = 'src/[% object.name %].pir'
+    $P1["pbc_pir"] = $P4
+    root_new $P5, ['parrot';'ResizablePMCArray']
+    assign $P5, 1
+    $P5[0] = '[% object.name %]/[% object.name %].pbc'
+    $P1["inst_lib"] = $P5
+    root_new $P6, ['parrot';'ResizablePMCArray']
+    assign $P6, 2
+    $P6[0] = "README"
+    $P6[1] = "setup.pl"
+    $P1["manifest_includes"] = $P6
+    $P3 = __ARG_1[1]
+    set $S1, $P3
+    ne $S1, "test", __label_1
+    WSubId_1()
+  __label_1: # endif
+    load_bytecode 'distutils.pir'
+    get_hll_global $P2, 'setup'
+    __ARG_1.'shift'()
+    $P2(__ARG_1, $P1)
+
+.end # main
+
+
+.sub 'do_test' :subid('WSubId_1')
+    null $I1
+[% IF object.test_system == PERL5 %]
+    set $S1, "perl t/[% object.name %].t"
+[% ELSE %]
+    set $S1, "parrot-nqp t/harness"
+[% END %] 
+    spawnw $I1, $S1
+    exit $I1
+
+.end # do_test
+CODE
+
+print $result;
 
 [% END %]
 
