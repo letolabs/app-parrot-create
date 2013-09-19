@@ -6,7 +6,7 @@ require "$FindBin::Bin/../app-parrot-create";
 use lib "$FindBin::Bin/../lib";    # install location
 use Parrot::Library;
 
-ok(my $library = Parrot::Library->new(),"Create HLL object");
+ok(my $library = Parrot::Library->new(),"Create Library object");
 
 my ($name, $builder, $harness, $template) =
                             ('a',Parrot::Type::WINXED,Parrot::Type::PERL5,"project-templates/library.parrot");
