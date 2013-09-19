@@ -1,0 +1,26 @@
+language: "perl"
+perl:
+  - "5.18"
+  - "5.16"
+  - "5.14"
+
+before_install:
+    - cpanm Test::Pod # optional dependency
+
+install:
+    - cpanm -v --installdeps --notest --mirror http://cpan.mirrors.travis-ci.org .
+
+script:
+    - perl Makefile.PL
+    - make test
+
+# branches:
+#   only:
+#     - master
+notifications:
+  recipients:
+    - duke@leto.net
+  email:
+    on_success: change
+    on_failure: always
+#env:
