@@ -16,6 +16,7 @@ WriteMakefile(
             'YAML'                              => 0,
             'Archive::Zip'                      => 0,
             'Mojolicious::Plugin::RenderFile'   => '0.01',
+	    'Try::Tiny'                         => '0.16',
             'Mojolicious::Plugin::YamlConfig'   => '0.1.5',
             'Template'                          => '2.23'
   },
