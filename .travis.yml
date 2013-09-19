@@ -20,6 +20,7 @@ script:
 notifications:
   recipients:
     - duke@leto.net
+    - denisboyun@gmail.com
   email:
     on_success: change
     on_failure: always
