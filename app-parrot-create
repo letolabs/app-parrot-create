@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
 use Mojo::Home;
+
+use lib 'lib';
 use Parrot::HLL;
 use Parrot::Library;
 

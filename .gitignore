@@ -16,3 +16,4 @@ MYMETA.yml
 nytprof.out
 pm_to_blib
 *.sw?
+MYMETA.json

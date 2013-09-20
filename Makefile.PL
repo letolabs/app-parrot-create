@@ -16,14 +16,16 @@ WriteMakefile(
             'YAML'                              => 0,
             'Archive::Zip'                      => 0,
             'Mojolicious::Plugin::RenderFile'   => '0.01',
-	    'Try::Tiny'                         => '0.16',
+            'Try::Tiny'                         => '0.16',
             'Mojolicious::Plugin::YamlConfig'   => '0.1.5',
             'Template'                          => '2.23'
   },
-  BUILD_REQUIRES => {'Test::Most'      => 0},
+  BUILD_REQUIRES => {
+            'Test::Most'      => 0
+  },
   META_MERGE =>{
         resources => {
-            repository  => 'http://github.com/leto/app-parrot-create',
+            repository  => 'http://github.com/letolabs/app-parrot-create',
         },
     },
   test      => {TESTS => 't/*.t'}

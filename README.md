@@ -1,17 +1,29 @@
-# Depending on #
+# App::Parrot::Create
+
+# Depends on
     Mojolicious
     Mojolicious::Plugin::YamlConfig
     Mojolicious::Plugin::RenderFile
     
-# INSTALL #
-    perl Makefile.PL
-    make
-    
-# TEST #
+
+# Installing Dependencies
+
+With cpanminus
+
+    cpanm --installdeps .
+
+# Running tests
+
     make test
 
-# CLEAR #
+# Cleaning up
+
     make clean
+
+# INSTALL
+
+    perl Makefile.PL
+    make install
     
 # RUN #
     perl app-parrot-create daemon

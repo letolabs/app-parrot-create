@@ -2,10 +2,10 @@
 
 <div class="masthead">
         <ul class="nav nav-pills pull-right">
-                <li id="newlang" class="active"><a href="#">High Level Language</a></li>
-                <li id="newlib"><a href="#">Parrot Library</a></li>
+                <li id="newlang" class="active"><a href="#">Language</a></li>
+                <li id="newlib"><a href="#">Library</a></li>
         </ul>
-        <h3 class="muted">Parrot creater</h3>
+        <h3 class="muted">Parrot Creator</h3>
 </div>
 
 <hr>
@@ -13,7 +13,7 @@
 <div id="newlib-content" class="row-fluid" style="display: none" >
     <div id="newlib-info" class="span8 hero-unit column">
         <h1>Parrot library</h1>
-        <p>Libraries are precompiled code files that can be loaded into Parrot.
+        <p>Libraries are pre-compiled code files that can be loaded into Parrot.
         A lot of examples allow easily create your own solutions.
         </p>
         <p><a href="http://docs.parrot.org/parrot/devel/html/docs/book/draft/chXX_library.pod.html" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
@@ -64,8 +64,15 @@
     <div id="newlang-info" class="span8 hero-unit column">
         <h1>High Level Language</h1>
         <p>
-            Parrot VM is providing powerful tools to make writing a compiler childishly easy.
-            Parrot Compiler Toolkit making Parrot an interesting target for language developers.
+
+            Parrot Virtual Machine is a collection of powerful tools to make
+            writing a compiler or Domain Specific Language (DSL) as easy as
+            possible.
+
+            The Parrot Compiler Toolkit (PCT) is a collection of tools for
+            language developers that provide various "pluggable" defaults.
+            For example, there is a default garbage collector, but you can
+            provide your own.
         <p>
         <a href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Squaak_Tutorial" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
