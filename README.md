@@ -1,16 +1,24 @@
 # App::Parrot::Create
 
-# Depends on
-    Mojolicious
-    Mojolicious::Plugin::YamlConfig
-    Mojolicious::Plugin::RenderFile
-    
+This web app helps create new [Parrot Virtual Machine](http://parrot.org) projects. Currently it
+supports High Level Languages (HLLs) and Libraries.
 
 # Installing Dependencies
 
-With cpanminus
+This app has a few dependencies, including but not limited to:
+
+    Mojolicious
+    Mojolicious::Plugin::YamlConfig
+    Mojolicious::Plugin::RenderFile
+
+To easily install all dependecies with cpanminus
 
     cpanm --installdeps .
+
+# Building
+
+    perl Makefile.PL
+    make
 
 # Running tests
 
@@ -20,17 +28,27 @@ With cpanminus
 
     make clean
 
-# INSTALL
+# Installing
 
     perl Makefile.PL
     make install
-    
-# RUN #
+
+# Running
+
+To run as a background process:
+
     perl app-parrot-create daemon
-    
-    or
-    
+
+Or as a normal process which prints to STDOUT/STDERR:
+
     morbo app-parrot-create
-    
-# VIEW #
+
+# View
+
+You can now view the app running in your favorite web browser at
+
     http://127.0.0.1:3000
+
+# Contributing
+
+Pull requests encouraged and welcome!
