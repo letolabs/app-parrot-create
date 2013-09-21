@@ -1,8 +1,8 @@
-package Parrot::Base;
+package App::Parrot::Create::Base;
 
-use v5.10;
+use v5.14;
 use Moose::Role;
-use Parrot::Type;
+use App::Parrot::Create::Type;
 use Template;
 use Method::Signatures;
 use File::Spec;
@@ -78,12 +78,12 @@ method generate_template($template_dir,$template_file) {
     
     my $tt      = Template->new($config);
     my $objects = {
-        WINXED              => Parrot::Type::WINXED,
-        NQP                 => Parrot::Type::NQP,
-        PERL5               => Parrot::Type::PERL5,
-        PIR                 => Parrot::Type::PIR,
-        ROSELLA_WINXED      => Parrot::Type::ROSELLA_WINXED,
-        ROSELLA_NQP         => Parrot::Type::ROSELLA_NQP,
+        WINXED              => App::Parrot::Create::Type::WINXED,
+        NQP                 => App::Parrot::Create::Type::NQP,
+        PERL5               => App::Parrot::Create::Type::PERL5,
+        PIR                 => App::Parrot::Create::Type::PIR,
+        ROSELLA_WINXED      => App::Parrot::Create::Type::ROSELLA_WINXED,
+        ROSELLA_NQP         => App::Parrot::Create::Type::ROSELLA_NQP,
         object              => $self,
     };
 
@@ -166,13 +166,13 @@ __END__
 
 =head1 NAME
 
-    Parrot::Base - Moose role for app-parrot-create web project.
+    App::Parrot::Create::Base - Moose role for app-parrot-create web project.
 
 =head1 SYNOPSIS
 
     package Foo;
     use Moose;
-    with 'Parrot::Base';
+    with 'App::Parrot::Create::Base';
     
     sub init {
         #need to set base options
@@ -201,10 +201,10 @@ __END__
             }
     
     build_system - Build system based on one of the languages which providing Parrot VM.
-            It's a String Constant type from Parrot::Type package.
+            It's a String Constant type from App::Parrot::Create::Type package.
             
             #set the build system
-            $self->build_system(Parrot::Type::WINXED)
+            $self->build_system(App::Parrot::Create::Type::WINXED)
             
             #check the build system
             if ($self->has_build_system){
@@ -212,10 +212,10 @@ __END__
             }
             
     test_system - Test system based on one of the languages which providing Parrot VM.
-            It's a String Constant type from Parrot::Type package.
+            It's a String Constant type from App::Parrot::Create::Type package.
             
             #set the test system
-            $self->test_system(Parrot::Type::WINXED)
+            $self->test_system(App::Parrot::Create::Type::WINXED)
             
             #check the test system
             if ($self->has_test_system){
@@ -311,7 +311,7 @@ __END__
 
 =head1 DESCRIPTION
 
-    This module built on Moose::Role module. It's including a base methods and fields, which is the same for Parrot:HLL and Parrot::Library.
+    This module built on Moose::Role module. It's including a base methods and fields, which is the same for Parrot:HLL and App::Parrot::Create::Library.
     If you want to use this role you will need to realization an init method. In this method you will need to set a required fields.
     It are name, build_system, test_system.
 

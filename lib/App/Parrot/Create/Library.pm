@@ -1,10 +1,9 @@
-package Parrot::Library;
+package App::Parrot::Create::Library;
 
-use v5.10;
 use Moose;
 use Method::Signatures;
 
-with 'Parrot::Base';
+with 'App::Parrot::Create::Base';
 
 method init($name, $build_system, $test_system, $template) {
     $self->name($name);
@@ -25,12 +24,12 @@ __END__
 
 =head1 NAME
 
-    Parrot::Library - Moose class for work with parrot library.
+    App::Parrot::Create::Library - Moose class for work with parrot library.
 
 =head1 SYNOPSIS
 
     #simple using
-    my $lib = Parrot::Library->new();
+    my $lib = App::Parrot::Create::Library->new();
     $lib->init($name, $builder, $harness, $template);
     
     #generate and return archive
@@ -57,7 +56,7 @@ __END__
 
 =head1 DESCRIPTION
     
-    Class is using for work with Parrot Library objects. It's implementing a Parrot::Base role and expanding its api.
+    Class is using for work with Parrot Library objects. It's implementing a App::Parrot::Create::Base role and expanding its api.
 
 =head1 BUGS
 

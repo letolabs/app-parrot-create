@@ -4,47 +4,47 @@ use Test::Mojo;
 use FindBin;
 require "$FindBin::Bin/../app-parrot-create";
 use lib "$FindBin::Bin/../lib";    # install location
-use Parrot::Library;
+use App::Parrot::Create::Library;
 
-ok(my $library = Parrot::Library->new(),"Create Library object");
+ok(my $library = App::Parrot::Create::Library->new(),"Create Library object");
 
 my ($name, $builder, $harness, $template) =
-                            ('a',Parrot::Type::WINXED,Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('a',App::Parrot::Create::Type::WINXED,App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok(my $archive_path = $library->generate(),"Winxed build + Perl 5 test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('ab',Parrot::Type::WINXED,Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('ab',App::Parrot::Create::Type::WINXED,App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Winxed build + Perl 5 test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('abc', Parrot::Type::NQP, Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('abc', App::Parrot::Create::Type::NQP, App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"NQP build + Perl 5 test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('abcd', Parrot::Type::NQP, Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('abcd', App::Parrot::Create::Type::NQP, App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"NQP build + Perl 5 test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('abcde', Parrot::Type::PIR, Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('abcde', App::Parrot::Create::Type::PIR, App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"PIR build + Perl 5 test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('abcdef', Parrot::Type::PIR, Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('abcdef', App::Parrot::Create::Type::PIR, App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"PIR build + Perl 5 test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('abcdefg', Parrot::Type::PERL5, Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('abcdefg', App::Parrot::Create::Type::PERL5, App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('abcdefgh', Parrot::Type::PERL5, Parrot::Type::PERL5,"project-templates/library.parrot");
+                            ('abcdefgh', App::Parrot::Create::Type::PERL5, App::Parrot::Create::Type::PERL5,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test without options");
 
@@ -52,42 +52,42 @@ ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test without opti
 
 
 ($name, $builder, $harness, $template) =
-                            ('b',Parrot::Type::WINXED,Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('b',App::Parrot::Create::Type::WINXED,App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Winxed build + Rosella(Winxed) test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('bc',Parrot::Type::WINXED,Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('bc',App::Parrot::Create::Type::WINXED,App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Winxed build + Rosella(Winxed) test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('bcd', Parrot::Type::NQP, Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('bcd', App::Parrot::Create::Type::NQP, App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"NQP build + Rosella(Winxed) test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('bcde', Parrot::Type::NQP, Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('bcde', App::Parrot::Create::Type::NQP, App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"NQP build + Rosella(Winxed) test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('bcdef', Parrot::Type::PIR, Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('bcdef', App::Parrot::Create::Type::PIR, App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"PIR build + Rosella(Winxed) test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('bcdefg', Parrot::Type::PIR, Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('bcdefg', App::Parrot::Create::Type::PIR, App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"PIR build + Rosella(Winxed) test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('bcdfgh', Parrot::Type::PERL5, Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('bcdfgh', App::Parrot::Create::Type::PERL5, App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('bcdfghk', Parrot::Type::PERL5, Parrot::Type::ROSELLA_WINXED,"project-templates/library.parrot");
+                            ('bcdfghk', App::Parrot::Create::Type::PERL5, App::Parrot::Create::Type::ROSELLA_WINXED,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test without options");
 
@@ -95,42 +95,42 @@ ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test without opti
 
 
 ($name, $builder, $harness, $template) =
-                            ('c',Parrot::Type::WINXED,Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('c',App::Parrot::Create::Type::WINXED,App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Winxed build + Rosella(Winxed) test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('cd',Parrot::Type::WINXED,Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('cd',App::Parrot::Create::Type::WINXED,App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Winxed build + Rosella(Winxed) test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('cde', Parrot::Type::NQP, Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('cde', App::Parrot::Create::Type::NQP, App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"NQP build + Rosella(Winxed) test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('cdef', Parrot::Type::NQP, Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('cdef', App::Parrot::Create::Type::NQP, App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"NQP build + Rosella(Winxed) test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('cdefg', Parrot::Type::PIR, Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('cdefg', App::Parrot::Create::Type::PIR, App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"PIR build + Rosella(Winxed) test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('cdefgh', Parrot::Type::PIR, Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('cdefgh', App::Parrot::Create::Type::PIR, App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"PIR build + Rosella(Winxed) test without options");
 
 ($name, $builder, $harness, $template) =
-                            ('cdefghk', Parrot::Type::PERL5, Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('cdefghk', App::Parrot::Create::Type::PERL5, App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test with options");
 
 ($name, $builder, $harness, $template) =
-                            ('cdefghkm', Parrot::Type::PERL5, Parrot::Type::ROSELLA_NQP,"project-templates/library.parrot");
+                            ('cdefghkm', App::Parrot::Create::Type::PERL5, App::Parrot::Create::Type::ROSELLA_NQP,"project-templates/library.parrot");
 $library->init($name, $builder, $harness, $template);
 ok($archive_path = $library->generate(),"Perl 5 build + Perl 5 test without options");
 

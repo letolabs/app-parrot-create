@@ -1,11 +1,10 @@
-package Parrot::HLL;
+package App::Parrot::Create::HLL;
 
-use v5.10;
 use Moose;
-use Parrot::Type;
+use App::Parrot::Create::Type;
 use Method::Signatures;
 
-with 'Parrot::Base';
+with 'App::Parrot::Create::Base';
 
 has 'with_pmc' => (
     isa         => 'Bool',
@@ -52,12 +51,12 @@ __END__
 
 =head1 NAME
 
-    Parrot::HLL - Moose class for work with high level language.
+    App::Parrot::Create::HLL - Moose class for work with high level language.
 
 =head1 SYNOPSIS
 
     #simple using
-    my $hll = Parrot::HLL->new();
+    my $hll = App::Parrot::Create::HLL->new();
     $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc, $template);
     
     #generate and return archive
@@ -122,7 +121,7 @@ __END__
 
 =head1 DESCRIPTION
 
-    Class is using for work with HLL objects. It's implementing a Parrot::Base role and expanding its api.
+    Class is using for work with HLL objects. It's implementing a App::Parrot::Create::Base role and expanding its api.
 
 =head1 BUGS
 

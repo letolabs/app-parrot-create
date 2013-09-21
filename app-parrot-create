@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
 use Mojo::Home;
-use Parrot::HLL;
-use Parrot::Library;
+use App::Parrot::Create::HLL;
+use App::Parrot::Create::Library;
 
 # Read configuration file
 plugin 'yaml_config';
@@ -21,7 +21,7 @@ post '/' => sub {
         ($name, $builder, $harness, $with_pmc, $with_ops, $with_doc)
                             = map { $self->param($_) } qw/hll_name hll_builder hll_test with_pmc with_ops with_doc/;
                             
-        my $hll = Parrot::HLL->new();
+        my $hll = App::Parrot::Create::HLL->new();
         $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc, $self->app->config->{hll_template});
         
         if ($archive_path = $hll->generate()) {
@@ -31,7 +31,7 @@ post '/' => sub {
     elsif(defined $self->param("lib")){
         ($name, $builder, $harness) = map { $self->param($_) } qw/lib_name lib_builder lib_test/;
 
-        my $library = Parrot::Library->new();
+        my $library = App::Parrot::Create::Library->new();
         $library->init($name, $builder, $harness, $self->app->config->{library_template});
         
         if ($archive_path = $library->generate()) {

@@ -1,6 +1,5 @@
-package Parrot::Type;
+package App::Parrot::Create::Type;
 
-use v5.10;
 use Moose::Util::TypeConstraints;
 
 use constant {
@@ -34,7 +33,7 @@ __END__
 
 =head1 NAME
 
-    Parrot::Type - basic data types for app-parrot-create project.
+    App::Parrot::Create::Type - basic data types for app-parrot-create project.
     
 =head1 CONSTANTS
 
@@ -69,7 +68,7 @@ __END__
 
 =head1 DESCRIPTION
 
-    It's module a provide a new data types, which is using on Parrot::Base.
+    It's module a provide a new data types, which is using on App::Parrot::Create::Base.
 
 =head1 BUGS
 
