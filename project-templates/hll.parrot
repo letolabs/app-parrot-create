@@ -629,7 +629,7 @@ This document describes how to use the command line [% object.name %] program, w
 
 or
 
-  parrot-[% object.name %]@exe [OPTIONS] <input>
+  parrot-[% object.name %]     [OPTIONS] <input>
 
 A number of additional options are available:
 

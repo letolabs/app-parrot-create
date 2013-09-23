@@ -114,9 +114,15 @@
             <div class="control-group">
                 <label class="control-label">Options:</label>
                 <div class="controls btn-group" data-toggle="buttons-checkbox">
-                    <button id="pmc" name="pmc" value="0" type="button" class="btn btn-toggle">Custom PMCs</button>
-                    <button id="ops" name="ops" value="0" type="button" class="btn btn-toggle">Custom ops</button>
-                    <button id="doc" name="doc" value="0" type="button" class="btn btn-toggle">Doc templates</button>
+                    <button id="pmc" rel="tooltip" title="allow to use aggregate data types such as arrays, associative arrays (Hashes), Exceptions, Structures, and Objects" name="pmc" value="0" type="button" class="btn btn-toggle">
+                        Custom PMCs
+                    </button>
+                    <button id="ops" rel="tooltip" title="allow to use opcodes. It are written using a very special syntax which is a mix of C and special keywords" name="ops" value="0" type="button" class="btn btn-toggle">
+                        Custom ops
+                    </button>
+                    <button id="doc" rel="tooltip" title="generate a pod-documentation" name="doc" value="0" type="button" class="btn btn-toggle">
+                        Doc templates
+                    </button>
                     <input type="hidden" id="with_pmc" name="with_pmc" value="0">
                     <input type="hidden" id="with_ops" name="with_ops" value="0">
                     <input type="hidden" id="with_doc" name="with_doc" value="0">
