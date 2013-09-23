@@ -62,19 +62,21 @@
 
 <div id="newlang-content" class="row-fluid" >
     <div id="newlang-info" class="span8 hero-unit column">
-        <h1>High Level Language</h1>
+        <h1>Parrot: DSL Toolbox</h1>
         <p>
 
             Parrot Virtual Machine is a collection of powerful tools to make
             writing a compiler or Domain Specific Language (DSL) as easy as
             possible.
+        </p>
+        <p>
 
             The Parrot Compiler Toolkit (PCT) is a collection of tools for
             language developers that provide various "pluggable" defaults.
             For example, there is a default garbage collector, but you can
             provide your own.
         <p>
-        <a href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Squaak_Tutorial" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <a href="http://parrot.github.io/html/pct_tutorial.html" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
     
     <div id="newlang-options" class="well span4 column">
