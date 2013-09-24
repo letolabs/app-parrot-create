@@ -16,7 +16,7 @@
         <p>Libraries are pre-compiled code files that can be loaded into Parrot.
         A lot of examples allow easily create your own solutions.
         </p>
-        <p><a href="http://docs.parrot.org/parrot/devel/html/docs/book/draft/chXX_library.pod.html" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <p><a href="https://github.com/letolabs/parrot-libgit2" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
     
     <div id="newlib-options" class="well span4 column">
