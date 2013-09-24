@@ -3,6 +3,8 @@
 This web app helps create new [Parrot Virtual Machine](http://parrot.org) projects. Currently it
 supports High Level Languages (HLLs) and Libraries.
 
+[![Build Status](https://secure.travis-ci.org/letolabs/app-parrot-create.png)](http://travis-ci.org/letolabs/app-parrot-create)
+
 # Installing Dependencies
 
 This app has a few dependencies, including but not limited to:
