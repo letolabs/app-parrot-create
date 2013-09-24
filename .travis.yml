@@ -5,6 +5,7 @@ perl:
   - "5.14"
 
 before_install:
+    - cpanm Template::Stash::XS
     - cpanm Test::Pod # optional dependency
 
 install:
