@@ -24,4 +24,5 @@ notifications:
   email:
     on_success: change
     on_failure: always
-#env:
+env:
+    - export PERL_MM_USE_DEFAULT=1
