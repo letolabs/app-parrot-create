@@ -598,7 +598,7 @@ object.
 
 
 __PARROT_REVISION__
-Revision
+[% Revision %]
 
 [% IF object.with_doc %]
 __doc/[% object.name %].pod__

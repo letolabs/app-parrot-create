@@ -13,8 +13,8 @@ use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 requires 'init';
 
 has 'name' => (
-    is          => 'rw',
     isa         => 'Str',
+    is          => 'rw',
     required    => 1,
     predicate   => 'has_name',
     default     => 'name'
@@ -34,6 +34,14 @@ has 'test_system' => (
     required    => 1,
     predicate   => 'has_test_system',
     default     => 'Perl 5'
+);
+
+has 'parrot_revision' => (
+    isa         => 'Str',
+    is          => 'rw',
+    required    => 1,
+    predicate   => 'has_parrot_revision',
+    default     => '5.3.0'
 );
 
 has 'archive_path' => (
@@ -84,6 +92,7 @@ method generate_template($template_dir,$template_file) {
         PIR                 => App::Parrot::Create::Type::PIR,
         ROSELLA_WINXED      => App::Parrot::Create::Type::ROSELLA_WINXED,
         ROSELLA_NQP         => App::Parrot::Create::Type::ROSELLA_NQP,
+        Revision            => $self->parrot_revision,
         object              => $self,
     };
 
@@ -219,6 +228,17 @@ __END__
             
             #check the test system
             if ($self->has_test_system){
+                ...
+            }
+            
+    parrot_revision - Minimum version of parrot vm.
+            It's a String type.
+            
+            #set the parrot revision
+            $self->parrot_revision("5.3.0")
+            
+            #check the parrot revision
+            if ($self->has_parrot_revision){
                 ...
             }
 

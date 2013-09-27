@@ -17,23 +17,27 @@ get '/' => 'index';
 post '/' => sub {
     my $self = shift;
 
-    my ($name, $builder, $harness, $with_pmc, $with_ops, $with_doc, $archive_path);
+    my ($name, $builder, $harness, $parrot_revision, $with_pmc, $with_ops, $with_doc, $archive_path);
     if (defined $self->param("hll")) {
-        ($name, $builder, $harness, $with_pmc, $with_ops, $with_doc)
-                            = map { $self->param($_) } qw/hll_name hll_builder hll_test with_pmc with_ops with_doc/;
-                            
+        ($name, $builder, $harness, $parrot_revision, $with_pmc, $with_ops, $with_doc)
+                            = map { $self->param($_) } qw/hll_name hll_builder hll_test
+                                                        hll_parrot_revision with_pmc with_ops with_doc/;
+         
         my $hll = App::Parrot::Create::HLL->new();
-        $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc, $self->app->config->{hll_template});
+        $hll->init($name, $builder, $harness, $parrot_revision,
+                   $with_pmc, $with_ops, $with_doc, $self->app->config->{hll_template});
         
         if ($archive_path = $hll->generate()) {
             $self->app->log->debug("The HLL created!");
         }
     }
     elsif(defined $self->param("lib")){
-        ($name, $builder, $harness) = map { $self->param($_) } qw/lib_name lib_builder lib_test/;
+        ($name, $builder, $harness, $parrot_revision)
+                                        = map { $self->param($_) } qw/lib_name lib_builder
+                                                                    lib_test lib_parrot_revision/;
 
         my $library = App::Parrot::Create::Library->new();
-        $library->init($name, $builder, $harness, $self->app->config->{library_template});
+        $library->init($name, $builder, $harness, $parrot_revision, $self->app->config->{library_template});
         
         if ($archive_path = $library->generate()) {
             $self->app->log->debug("The Library created!");

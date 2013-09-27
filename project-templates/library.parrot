@@ -503,7 +503,7 @@ Francois Perrad
 
 
 __PARROT_REVISION__
-Revision
+[% Revision %]
 
 __[% object.name %]/.ignore__
 

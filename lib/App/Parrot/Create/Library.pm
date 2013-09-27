@@ -5,10 +5,11 @@ use Method::Signatures;
 
 with 'App::Parrot::Create::Base';
 
-method init($name, $build_system, $test_system, $template) {
+method init($name, $build_system, $test_system, $parrot_revision, $template) {
     $self->name($name);
     $self->build_system($build_system);
     $self->test_system($test_system);
+    $self->parrot_revision($parrot_revision);
     $self->template($template);
     
     return 1;
@@ -30,7 +31,7 @@ __END__
 
     #simple using
     my $lib = App::Parrot::Create::Library->new();
-    $lib->init($name, $builder, $harness, $template);
+    $lib->init($name, $builder, $harness, $parrot_revision, $template);
     
     #generate and return archive
     $archive_path = $lib->generate();
@@ -47,6 +48,7 @@ __END__
     $name,
     $build_system,
     $test_system,
+    $parrot_revision,
     $template;
 =cut
 

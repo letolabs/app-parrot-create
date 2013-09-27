@@ -52,6 +52,15 @@
                     </select>
                 </div>
             </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="lib_parrot_revision">Parrot Revision:</label>
+                <div class="controls"> 
+                    <select name="lib_parrot_revision">
+                        <option selected="true">5.3.0</option>
+                    </select>
+                </div>
+            </div>
 
             <div align="center">
                 <button class="btn btn-large btn-success" name="lib" id="lib_btn" disabled="disabled" type="submit">Download</button>
@@ -109,6 +118,15 @@
                         <option selected="true">Rosella (Winxed)</option>
                         <option>Rosella (NQP)</option>
                         <option>Perl 5</option>
+                    </select>
+                </div>
+            </div>
+            
+             <div class="control-group">
+                <label class="control-label" for="hll_parrot_revision">Parrot Revision:</label>
+                <div class="controls"> 
+                    <select name="hll_parrot_revision">
+                        <option selected="true">5.3.0</option>
                     </select>
                 </div>
             </div>

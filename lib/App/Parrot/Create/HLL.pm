@@ -30,10 +30,11 @@ has 'with_doc' => (
     default     => '0'
 );
 
-method init($name, $build_system, $test_system, $with_pmc, $with_ops, $with_doc, $template) {
+method init($name, $build_system, $test_system, $parrot_revision, $with_pmc, $with_ops, $with_doc, $template) {
     $self->name($name);
     $self->build_system($build_system);
     $self->test_system($test_system);
+    $self->parrot_revision($parrot_revision);
     $self->with_pmc($with_pmc);
     $self->with_ops($with_ops);
     $self->with_doc($with_doc);
@@ -57,7 +58,7 @@ __END__
 
     #simple using
     my $hll = App::Parrot::Create::HLL->new();
-    $hll->init($name, $builder, $harness, $with_pmc, $with_ops, $with_doc, $template);
+    $hll->init($name, $builder, $harness, $parrot_revision, $with_pmc, $with_ops, $with_doc, $template);
     
     #generate and return archive
     $archive_path = $hll->generate();
@@ -109,6 +110,7 @@ __END__
     $name,
     $build_system,
     $test_system,
+    $parrot_revision,
     $with_pmc,
     $with_ops,
     $with_doc,
